@@ -176,13 +176,10 @@
                     for (var j = 0; j <= data[i].wks.length - 1; j++) {
                       var postingInt = parseInt(data[i].wks[j]);
                       if (Number.isNaN(data[i].wks[j])) {
-                        
                         function firstNaN(element) {
                           return Number.isNaN(element);
                         }
-
-                        var key = data[i].wks.findIndex(firstNaN); 
-                        console.log(key);
+                        var key = data[i].wks.findIndex(firstNaN);
                       }
                     }
                   }

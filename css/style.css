@@ -90,6 +90,7 @@ g.context rect.background{
 table {
   background: #FFF;
 }
+table .table td { font-weight: 500; }
 table td[class*="span"],table th[class*="span"],.row-fluid table td[class*="span"],.row-fluid table th[class*="span"]{display:table-cell;text-align:center;margin-left:0;}
 .table {width:60%;border-top: 2px;border-bottom: 2px;}
 .table td.fifteen,.table th.fifteen{float:none;width:15%;padding:3px;}
