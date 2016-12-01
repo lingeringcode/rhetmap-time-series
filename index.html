@@ -242,7 +242,7 @@
               z.domain(marketYears.map(function(c) { return c.id; }));
 
               var legend = svg.selectAll('g')
-                .data(marketYears)
+                .data(marketYears, function(d){ return d; })
                 .enter()
                 .append('g')
                 .attr('class', 'legend');
@@ -250,6 +250,7 @@
               legend.append('rect')
                 .attr('x', width - 20)
                 .attr('y', function(d, i) {
+                  // console.log(d,i);
                   return i * 20;
                 })
                 .attr('width', 10)
