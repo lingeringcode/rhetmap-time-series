@@ -90,7 +90,6 @@ g.context rect.background{
 table {
   background: #FFF;
 }
-table .table tbody { font-weight: 500; }
 table td[class*="span"],table th[class*="span"],.row-fluid table td[class*="span"],.row-fluid table th[class*="span"]{display:table-cell;text-align:center;margin-left:0;}
 .table {width:60%;border-top: 2px;border-bottom: 2px;}
 .table td.fifteen,.table th.fifteen{float:none;width:15%;padding:3px;}
@@ -106,6 +105,7 @@ table td[class*="span"],table th[class*="span"],.row-fluid table td[class*="span
 .table tr > th:nth-child(odd) {text-align: left;}
 .table tr > th {font-size: 1.1em;padding-bottom: 3px; color: #333;}
 .table tr > th small {font-size: 0.8em;}
+.table td { font-weight: 500; }
 .striped tbody tr:nth-child(odd) td,.striped tbody tr:nth-child(odd) th{background-color:rgba(148,103,189,0.64);}
 ul.tables{margin-left: 3px;list-style-type: none;}
 ul.tables > li {margin-bottom: 20px;}
