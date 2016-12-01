@@ -1,0 +1,110 @@
+@import url('normalize.css');
+@import url('demo.css');
+
+#chart-container {
+	width: 1000px; 
+	margin: 0 auto 50px auto;
+	background: rgba(255,255,255,0.5);
+	box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+	padding: 20px 30px;
+}
+
+#chart-container h2 {
+	color: #444;
+	margin: 0 0 10px;
+	font-weight: 300;
+	padding: 10px;
+	text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+	font-size: 24px;
+}
+
+svg {
+	font-family: 'Lato', Arial, serif;
+	font-size: 10px;
+	font-weight: 700;
+	text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+}
+
+text.country-title {
+	font-size: 20px;
+}
+
+text.instructions {
+	font-size: 16px;
+}
+
+g.context g.brush rect.background {
+	fill: rgba(0,0,0,.1);
+}
+
+g.context g.axis path {
+	stroke-opacity: 0;
+}
+
+g.context g.axis line {
+	stroke-opacity: .1;
+}
+
+g.france path.chart {
+	fill: rgba(127,201,127,0.5);
+}
+
+g.germany path.chart {
+	fill: rgba(127,201,174,0.5);
+}
+
+g.japan path.chart {
+	fill: rgba(127,183,201,0.5);
+}
+
+g.uk path.chart {
+	fill: rgba(127,130,201,0.5);
+}
+
+g.usa path.chart {
+	fill: rgba(171,127,201,0.5);
+}
+
+.axis path, .axis line {
+	fill: none;
+	stroke: #aaa;
+	shape-rendering: crispEdges;
+}
+
+.brush .extent {
+	stroke: #f09f8c;
+	fill-opacity: .125;
+	shape-rendering: crispEdges;
+}
+
+g.context rect.background{
+	fill: rgb(200,200,255);
+	visibility: visible !important;
+}​
+
+/* -----------------------------------------------------------------------------
+
+  TABLE
+  
+----------------------------------------------------------------------------- */
+table {
+  background: #FFF;
+}
+table td[class*="span"],table th[class*="span"],.row-fluid table td[class*="span"],.row-fluid table th[class*="span"]{display:table-cell;text-align:center;margin-left:0;}
+.table {width:60%;border-top: 2px;border-bottom: 2px;}
+.table td.fifteen,.table th.fifteen{float:none;width:15%;padding:3px;}
+.table td.difficulties,.table th.difficulties{float:none;width:10%;padding:3px;text-align:center;font-size:1.1em;}
+.table td.twenty,.table th.twenty{float:none;width:20%;padding:3px;}
+.table td.thirty,.table th.thirty{float:none;width:30%;padding:3px;}
+.table td.forty,.table th.forty{float:none;width:40%;padding:3px;}
+.table td.fifty,.table th.fifty{float:none;width:50%;padding:3px}
+.table td.sixty,.table th.sixty{float:none;width:60%;padding:3px}
+.table td.seventy,.table th.seventy{float:none;width:70%;padding:3px}
+.table tr.hundred,td.hundred,.table th.hundred{float:none;width:100%;padding:3px}
+.table tr > td:nth-child(even) {text-align: center;}
+.table tr > th:nth-child(odd) {text-align: left;}
+.table tr > th {font-size: 1.1em;padding-bottom: 3px; color: #333;}
+.table tr > th small {font-size: 0.8em;}
+.striped tbody tr:nth-child(odd) td,.striped tbody tr:nth-child(odd) th{background-color:rgba(148,103,189,0.64);}
+ul.tables{margin-left: 3px;list-style-type: none;}
+ul.tables > li {margin-bottom: 20px;}

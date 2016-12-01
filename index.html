@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Rhetoric, Composition, and Technical Communication Job Postings per Year</title>
+    <meta name="description" content="Rhetoric, Composition, and Technical Communication Job Postings per Year" />
+    <meta name="keywords" content="rhetoric and composition, job market, infographic, d3.js" />
+    <meta name="author" content="Chris Lindgren" />
+    <!-- <link rel="shortcut icon" href="../favicon.ico">  -->
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css' />
+    <script type="text/javascript" src="js/modernizr.custom.79639.js"></script> 
+    <!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->  
+    <!-- js libs -->
+      <script src="//d3js.org/d3.v4.min.js"></script>
+      <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Rhetoric, Composition, and Technical Communication Job Postings per Year</h1>
+      </header>
+        
+      <section class="main">
+        <div id="chart-container">
+          <style>
+            svg {
+              padding: 50px 50px;
+              padding-top: 15px;
+              margin-bottom: 50px;
+            }
+            .axis--x path {
+              display: none;
+            }
+
+            .line {
+              fill: none;
+              stroke: steelblue;
+              stroke-width: 2.5px;
+            }
+          </style>
+          <svg width="960" height="500"></svg>
+          
+          <script type="text/javascript">
+            var myData = [];
+            var fullMarketData = [];
+
+            // Get and format spreadsheet data
+            formatData();
+            function formatData() {
+              // Get Spreadsheet data
+              // ID of the Google Spreadsheet
+              var spreadsheetID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w";
+               
+              // Make sure it is public or set to Anyone with link can view 
+              var rurl = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
+
+              // Spreadsheet data request
+              // src: https://spreadsheets.google.com/feeds/list/1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w/od6/public/values?alt=json
+              var request = new XMLHttpRequest();
+              request.open('GET', rurl, true);
+
+              request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+
+                  // Success! Got the data
+                  var data = JSON.parse(request.responseText);
+                  var week;
+                  // Arrays for week data
+                  var yr1213wks = [];
+                  var yr1314wks = [];
+                  var yr1415wks = [];
+                  var yr1516wks = [];
+                  var yr1617wks = [];
+                  // Dicts for year data
+                  var yr1213 = {};
+                  var yr1314 = {};
+                  var yr1415 = {};
+                  var yr1516 = {};
+                  var yr1617 = {};
+
+                  // Get length of JSON object
+                  var length = 0;
+                  for(var k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++;
+
+                  // Put week data in array sorted by market years
+                  for (var i = 0; i <= length - 1; i++) {
+                    if (i === 0) {
+                      week = data.feed.entry[i].gsx$_cn6ca.$t;
+                      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
+                      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
+                      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
+                      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
+                      yr1617wks.push((data.feed.entry[i].gsx$rctbw_4.$t).slice(8,10));
+                    }
+                    else {
+                      week = data.feed.entry[i].gsx$_cn6ca.$t;
+                      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
+                      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
+                      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
+                      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
+                      if (data.feed.entry[i].gsx$rctbw_4.$t === "") {
+                        yr1617wks.push(Number.NaN);
+                      }
+                      else {
+                        yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
+                      }
+                    }
+                  }
+                  makeYears();
+
+                  // Create year specific data with week datapoints
+                  function makeYears() {
+                    yr1213 = {
+                      yr:"2012 - 2013",
+                      wks:yr1213wks
+                    };
+                    yr1314 = {
+                      yr:"2013 - 2014",
+                      wks:yr1314wks
+                    };
+                    yr1415 = {
+                      yr:"2014 - 2015",
+                      wks:yr1415wks
+                    };
+                    yr1516 = {
+                      yr:"2015 - 2016",
+                      wks:yr1516wks
+                    };
+                    yr1617 = {
+                      yr:"2016 - 2017",
+                      wks:yr1617wks
+                    };
+                    makeMarketData();
+                  }
+
+                  // Join all dicts to one array object
+                  function makeMarketData() {
+                    fullMarketData.push(yr1213,yr1314,yr1415,yr1516,yr1617);
+                    myData = fullMarketData;
+                    makeDataViz(myData);
+                  }
+
+                } else {
+                  // We reached our target server, but it returned an error
+                  console.log("connection error")
+                }
+              };
+
+              request.onerror = function() {
+                // There was a connection error of some sort
+                console.log("connection error")
+              };
+
+              request.send();
+            }
+
+            // Write and draw the chart
+            function makeDataViz(data) {
+
+              var svg = d3.select("svg"),
+                margin = {top: 0, right: 150, bottom: 50, left: 0},
+                width = svg.attr("width") - margin.left - margin.right,
+                height = svg.attr("height") - margin.top - margin.bottom,
+                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+              var x = d3.scaleLinear().range([0, width]),
+                  y = d3.scaleLinear().range([height, 0]),
+                  z = d3.scaleOrdinal(d3.schemeCategory10);
+
+              function findLastPost(yr) {
+                for (var i = 0; i <= data.length - 1; i++) {
+                  if (data[i].yr == yr) {
+                    for (var j = 0; j <= data[i].wks.length - 1; j++) {
+                      var postingInt = parseInt(data[i].wks[j]);
+                      if (Number.isNaN(data[i].wks[j])) {
+                        
+                        function firstNaN(element) {
+                          return Number.isNaN(element);
+                        }
+
+                        var key = data[i].wks.findIndex(firstNaN); 
+                        console.log(key);
+                      }
+                    }
+                  }
+                }
+              }
+
+              function findMaxPost(d) {
+                var postingWk = d.week;
+                var max = [];
+                for (var mp = 0; mp <= data.length - 1; mp++) {
+                  for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
+                    if ( Number.isNaN(data[mp].wks[mw]) ) {
+                      var lastMaxPost = findLastPost(data[mp].yr);
+                      var lmp = data[mp].wks[lastMaxPost];
+                      return lmp;
+                    }
+                  }
+                }
+              }
+
+              /* 
+              * Hacky solutions for NaNs: 
+              * findLastPost() & findMaxPost()
+              */
+              var line = d3.line()
+                  .curve(d3.curveBasis)
+                  .x(function(d) {
+                      return x( Number.isNaN(d.postings) ? findLastPost(d) : d.week);
+                  })
+                  .y(function(d) {
+                    return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings); 
+                  });
+
+              var marketYears = data.map(function(d) {
+                var wkD = d.wks;
+                var week = 0;
+                return {
+                  id: d.yr,
+                  values: wkD.map(function(f) {
+                    if (parseInt(f) == 0){
+                      return { week: week+=1, postings: Number.NaN };
+                    } else {
+                      return { week: week+=1, postings: f };
+                    }
+                    
+                  })
+                };
+              });
+
+              x.domain([ 
+                parseInt(marketYears[0].values[0].week),
+                parseInt(marketYears[marketYears.length - 1].values[marketYears[marketYears.length - 1].values.length - 1].week)
+              ]);
+
+              y.domain([
+                d3.min(marketYears, function(c) { return d3.min(c.values, function(d) { return parseInt(d.postings); }); }),
+                d3.max(marketYears, function(c) { return d3.max(c.values, function(d) { return parseInt(d.postings); }); })
+              ]);
+
+              z.domain(marketYears.map(function(c) { return c.id; }));
+
+              var legend = svg.selectAll('g')
+                .data(marketYears)
+                .enter()
+                .append('g')
+                .attr('class', 'legend');
+
+              legend.append('rect')
+                .attr('x', width - 20)
+                .attr('y', function(d, i) {
+                  return i * 20;
+                })
+                .attr('width', 10)
+                .attr('height', 10)
+                .style('fill', function(d) {
+                  return z(d.id);
+                });
+
+              legend.append('text')
+                .attr('x', width - 8)
+                .attr('y', function(d, i) {
+                  return (i * 20) + 9;
+                })
+                .text(function(d) {
+                  return d.id;
+                });
+              d3.selectAll(".legend")
+                .attr("transform", "translate(0,300)");
+
+              g.append("g")
+                  .attr("class", "axis axis--x")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(d3.axisBottom(x))
+                .append("text")
+                  .attr("y", 6)
+                  .attr("dy", "1.5em")
+                  .attr("fill", "#000")
+                  .text("Weeks");
+
+              g.append("g")
+                  .attr("class", "axis axis--y")
+                  .call(d3.axisLeft(y))
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 0)
+                  .attr("dy", "1.5em")
+                  .attr("fill", "#000")
+                  .text("Postings");
+
+              var markYear = g.selectAll(".markYear")
+                .data(marketYears)
+                .enter().append("g")
+                  .attr("class", "markYear");
+
+              markYear.append("path")
+                  .attr("class", "line")
+                  .attr("d", function(marketYears) {
+                    return line(marketYears.values);
+                  })
+                  .style("stroke", function(marketYears) { return z(marketYears.id); });
+
+              markYear.append("text")
+                  .datum(function(d) {
+                    return {
+                      id: d.id, 
+                      value: d.values[d.values.length - 1]
+                    }; 
+                  })
+                  .attr("transform", function(d) {
+                    return "translate("
+                              + x( Number.isNaN(d.value.postings) ? 11 : d.value.week )
+                              + "," 
+                              + y( Number.isNaN(d.value.postings) ? 155 : d.value.postings) + ")";
+                  })
+                  .attr("x", 10)
+                  .attr("dy", "0.35em")
+                  .style("font", "12px sans-serif")
+                  // .text(function(d) { return d.id });
+
+
+              /** Mouseover line and circle effect
+              *   Modified from src: http://stackoverflow.com/questions/34886070/multiseries-line-chart-with-mouseover-tooltip/34887578#34887578
+              **/
+              var mouseG = svg.append("g")
+                .attr("class", "mouse-over-effects");
+
+              mouseG.append("path") // this is the black vertical line to follow mouse
+                .attr("class", "mouse-line")
+                .style("stroke", "black")
+                .style("stroke-width", "1px")
+                .style("opacity", "0");
+                
+              var lines = document.getElementsByClassName('line');
+
+              var mousePerLine = mouseG.selectAll('.mouse-per-line')
+                .data(marketYears)
+                .enter()
+                .append("g")
+                .attr("class", "mouse-per-line");
+
+              mousePerLine.append("circle")
+                .attr("r", 7)
+                .style("stroke", function(d) {
+                  return z(d.postings);
+                })
+                .style("fill", "none")
+                .style("stroke-width", "1px")
+                .style("opacity", "0");
+
+              mousePerLine.append("text")
+                .attr("transform", "translate(10,3)");
+
+              mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
+                .attr('width', width) // can't catch mouse events on a g element
+                .attr('height', height)
+                .attr('fill', 'none')
+                .attr('pointer-events', 'all')
+                .on('mouseout', function() { // on mouse out hide line, circles and text
+                  d3.select(".mouse-line")
+                    .style("opacity", "0");
+                  d3.selectAll(".mouse-per-line circle")
+                    .style("opacity", "0");
+                  d3.selectAll(".mouse-per-line text")
+                    .style("opacity", "0");
+                })
+                .on('mouseover', function() { // on mouse in show line, circles and text
+                  d3.select(".mouse-line")
+                    .style("opacity", "1");
+                  d3.selectAll(".mouse-per-line circle")
+                    .style("opacity", "1");
+                  d3.selectAll(".mouse-per-line text")
+                    .style("opacity", "1");
+                })
+                .on('mousemove', function() { // mouse moving over canvas
+                  var mouse = d3.mouse(this);
+                  d3.select(".mouse-line")
+                    .attr("d", function() {
+                      var d = "M" + mouse[0] + "," + height;
+                      d += " " + mouse[0] + "," + 0;
+                      return d;
+                    });
+
+                  d3.selectAll(".mouse-per-line")
+                    .attr("transform", function(d, i) {
+
+                      var xDate = x.invert(mouse[0]),
+                          bisect = d3.bisector(function(d) {
+                            return d.postings; 
+                          }).right;
+                          idx = bisect(d.values, xDate);
+                      
+                      var beginning = 0,
+                          end = lines[i].getTotalLength(),
+                          target = null;
+
+                      while (true){
+                        target = Math.floor((beginning + end) / 2);
+                        pos = lines[i].getPointAtLength(target);
+                        if ((target === end || target === beginning) && pos.x !== mouse[0]) {
+                            break;
+                        }
+                        if (pos.x > mouse[0])      end = target;
+                        else if (pos.x < mouse[0]) beginning = target;
+                        else break; //position found
+                      }
+                      
+                      d3.select(this).select('text')
+                        .text(function(d) {
+                          var weekNum = xDate.toFixed(0);
+                          var postNum = d.values[(parseInt(xDate.toFixed(0))-1)].postings;
+                          var label;
+
+                          if (Number.isNaN(postNum)) {
+                            label = 'Week: '
+                                      +weekNum
+                                      +'\nPostings: '
+                                      +'N/A';
+                          } else {
+                            label = 'Week: '
+                                      +weekNum
+                                      +'\nPostings: '
+                                      +postNum;
+                          }
+
+                          return label;
+                        });
+                        
+                      return "translate(" + mouse[0] + "," + pos.y +")";
+                    });
+                });
+            }
+          </script>
+
+          <div id="computed-values">
+            <h3>
+              Totals for each season by July 1st:
+            </h3>
+
+            <table class="table striped">
+              <thead>
+                <tr>
+                  <th class="fifteen">
+                    Season Year
+                  </th>
+                  <th class="fifteen">
+                    Total Posts
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr>
+                  <td class="fifteen">
+                    2012-2013
+                  </td>
+                  <td class="fifteen">
+                    278
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2013-2014
+                  </td>
+                  <td class="fifteen">
+                    318
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2014-2015
+                  </td>
+                  <td class="fifteen">
+                    325
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2015-2016
+                  </td>
+                  <td class="fifteen">
+                    273
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2015-2016
+                  </td>
+                  <td class="fifteen">
+                    N/A
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+            
+            <h3>
+              Percentage of season advertised by Jan 3rd:
+            </h3>
+
+            <table class="table striped">
+              <thead>
+                <tr>
+                  <th class="fifteen">
+                    Season Year
+                  </th>
+                  <th class="fifteen">
+                    % Total Posts
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr>
+                  <td class="fifteen">
+                    2012-2013
+                  </td>
+                  <td class="fifteen">
+                    73.74%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2013-2014
+                  </td>
+                  <td class="fifteen">
+                    73.58%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2014-2015
+                  </td>
+                  <td class="fifteen">
+                    73.23%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2015-2016
+                  </td>
+                  <td class="fifteen">
+                    73.62%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2015-2016
+                  </td>
+                  <td class="fifteen">
+                    N/A
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
