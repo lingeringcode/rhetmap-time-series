@@ -1,8 +1,58 @@
 @import url('normalize.css');
-@import url('demo.css');
+
+body{
+	font-family: 'Lato', Arial, serif;
+	background: #ddd url(../images/bg.jpg) repeat top left;
+	font-weight: 300;
+	font-size: 14px;
+	color: #000;
+	-webkit-font-smoothing: antialiased;
+}
+a {
+	color: #555;
+	text-decoration: none;
+}
+.container{
+	width: 100%;
+	position: relative;
+}
+.clr{
+	clear: both;
+	padding: 0;
+	height: 0;
+	margin: 0;
+}
+.main{
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+}
+.container > header{
+	margin: 10px;
+	padding: 20px 10px 10px 10px;
+	position: relative;
+	display: block;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    text-align: center;
+}
+.container > header h1{
+	font-size: 30px;
+	line-height: 32px;
+	margin: 0;
+	position: relative;
+	font-weight: 600;
+	color: #666;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.7);
+}
+.container > header p{
+	margin: 0;
+	padding: 15px 0 5px 0;
+	color: #000;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.7);
+}
 
 #chart-container {
-	width: 1000px; 
+	width: 1200px; 
 	margin: 0 auto 50px auto;
 	background: rgba(255,255,255,0.5);
 	box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
@@ -25,14 +75,6 @@ svg {
 	text-shadow: 0 1px 1px rgba(255,255,255,0.8);
 }
 
-text.country-title {
-	font-size: 20px;
-}
-
-text.instructions {
-	font-size: 16px;
-}
-
 g.context g.brush rect.background {
 	fill: rgba(0,0,0,.1);
 }
@@ -43,26 +85,6 @@ g.context g.axis path {
 
 g.context g.axis line {
 	stroke-opacity: .1;
-}
-
-g.france path.chart {
-	fill: rgba(127,201,127,0.5);
-}
-
-g.germany path.chart {
-	fill: rgba(127,201,174,0.5);
-}
-
-g.japan path.chart {
-	fill: rgba(127,183,201,0.5);
-}
-
-g.uk path.chart {
-	fill: rgba(127,130,201,0.5);
-}
-
-g.usa path.chart {
-	fill: rgba(171,127,201,0.5);
 }
 
 .axis path, .axis line {

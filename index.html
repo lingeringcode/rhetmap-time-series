@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -8,14 +9,15 @@
     <meta name="description" content="Rhetoric, Composition, and Technical Communication Job Postings per Year" />
     <meta name="keywords" content="rhetoric and composition, job market, infographic, d3.js" />
     <meta name="author" content="Chris Lindgren" />
-    <!-- <link rel="shortcut icon" href="../favicon.ico">  -->
+
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css' />
+
     <script type="text/javascript" src="js/modernizr.custom.79639.js"></script> 
     <!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->  
     <!-- js libs -->
-      <script src="//d3js.org/d3.v4.min.js"></script>
-      <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -41,7 +43,7 @@
               stroke-width: 2.5px;
             }
           </style>
-          <svg width="960" height="500"></svg>
+          <svg width="1080" height="500"></svg>
           
           <script type="text/javascript">
             var myData = [];
@@ -311,12 +313,12 @@
                   })
                   .attr("transform", function(d) {
                     return "translate("
-                              + x( Number.isNaN(d.value.postings) ? 11 : d.value.week )
+                              + x( Number.isNaN(d.value.postings) ? findLastPost(d) : d.value.week )
                               + "," 
-                              + y( Number.isNaN(d.value.postings) ? 155 : d.value.postings) + ")";
+                              + y( Number.isNaN(d.value.postings) ? findMaxPost(d) : d.value.postings) + ")";
                   })
-                  .attr("x", 10)
-                  .attr("dy", "0.35em")
+                  .attr("x", 50)
+                  .attr("dy", "0.5em")
                   .style("font", "12px sans-serif")
                   // .text(function(d) { return d.id });
 
