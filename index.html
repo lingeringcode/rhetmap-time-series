@@ -49,6 +49,57 @@
             var myData = [];
             var fullMarketData = [];
 
+            // Index finder function for NaN
+            // src: http://jsfiddle.net/Hacketo/jetgcm1t/
+            Array.prototype.indexOf = (function(){
+                'use strict';
+                
+                var _arrayIndexOf = Array.prototype.indexOf;
+                
+                return function(searchElement, fromIndex){
+                    
+                    // If this test pass, value is NaN
+                    // isNaN check for 'not a number', not only NaN value
+                    if (searchElement !== searchElement){
+                        
+                        // Parts of the indexOf pollyfill
+                        //@see : https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+                        if (this == null) {
+                            throw new TypeError('"this" is null or not defined');
+                        }
+                        
+                        var O = Object(this);
+                        // Let len be ToUint32(lenValue).
+                        var len = O.length >>> 0;
+                        
+                        if (len === 0) {
+                            return -1;
+                        }
+                        
+                        var n = +fromIndex || 0;
+                        
+                        if (Math.abs(n) === Infinity) {
+                            n = 0;
+                        }
+                        
+                        if (n >= len) {
+                            return -1;
+                        }
+                        var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+                        
+                        while (k < len) {
+                            if (this[k] !== this[k]){
+                                return k;
+                            }
+                            k++;
+                        }
+                        
+                        return -1;
+                    }
+                    return _arrayIndexOf.call(this, searchElement, fromIndex);
+                };
+            })();
+
             // Get and format spreadsheet data
             formatData();
             function formatData() {
@@ -172,32 +223,45 @@
                   y = d3.scaleLinear().range([height, 0]),
                   z = d3.scaleOrdinal(d3.schemeCategory10);
 
+              // Returns last week with posting
+              function findMaxLastWeek(d) {
+                for (var mp = 0; mp <= data.length - 1; mp++) {
+                  for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
+
+                    if ( Number.isNaN(data[mp].wks[mw]) ) {
+                      var week = data[mp].wks.indexOf(data[mp].wks[mw]);
+                      return week;
+                    }
+
+                  }
+                }
+              }
+
+              // Returns last week for index
               function findLastPost(yr) {
                 for (var i = 0; i <= data.length - 1; i++) {
-                  if (data[i].yr == yr) {
+                  if (data[i].yr == yr) { // Get year with NaN
                     for (var j = 0; j <= data[i].wks.length - 1; j++) {
-                      var postingInt = parseInt(data[i].wks[j]);
-                      if (Number.isNaN(data[i].wks[j])) {
-                        function firstNaN(element) {
-                          return Number.isNaN(element);
-                        }
-                        var key = data[i].wks.findIndex(firstNaN);
-                      }
+                      var arr = data[i].wks;
+                      var key = arr.indexOf(NaN);
+                      return key;
                     }
                   }
                 }
               }
 
+              // Returns last posting count
               function findMaxPost(d) {
-                var postingWk = d.week;
-                var max = [];
                 for (var mp = 0; mp <= data.length - 1; mp++) {
                   for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
+
                     if ( Number.isNaN(data[mp].wks[mw]) ) {
                       var lastMaxPost = findLastPost(data[mp].yr);
-                      var lmp = data[mp].wks[lastMaxPost];
+                      var weekIndex = lastMaxPost - 1;
+                      var lmp = data[mp].wks[weekIndex];
                       return lmp;
                     }
+
                   }
                 }
               }
@@ -209,7 +273,7 @@
               var line = d3.line()
                   .curve(d3.curveBasis)
                   .x(function(d) {
-                      return x( Number.isNaN(d.postings) ? findLastPost(d) : d.week);
+                    return x( Number.isNaN(d.postings) ? findMaxLastWeek(d) : d.week);
                   })
                   .y(function(d) {
                     return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings); 
@@ -313,7 +377,7 @@
                   })
                   .attr("transform", function(d) {
                     return "translate("
-                              + x( Number.isNaN(d.value.postings) ? findLastPost(d) : d.value.week )
+                              + x( Number.isNaN(d.value.postings) ? findMaxLastWeek(d) : d.value.week )
                               + "," 
                               + y( Number.isNaN(d.value.postings) ? findMaxPost(d) : d.value.postings) + ")";
                   })
