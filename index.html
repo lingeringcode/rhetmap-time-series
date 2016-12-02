@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
+
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -352,8 +352,7 @@
                 .style("stroke-width", "1px")
                 .style("opacity", "0");
 
-              mousePerLine.append("text")
-                .attr("transform", "translate(10,3)");
+              mousePerLine.append("text");
 
               mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
                 .attr('width', width) // can't catch mouse events on a g element
@@ -409,6 +408,7 @@
                         else break; //position found
                       }
                       
+                      // Add mouseover label
                       d3.select(this).select('text')
                         .text(function(d) {
                           var weekNum = xDate.toFixed(0);
@@ -428,6 +428,14 @@
                           }
 
                           return label;
+                        })
+                        .attr("transform", function(d) {
+                          var weekNum = d.values[(parseInt(xDate.toFixed(0))-1)].week;
+                          if (weekNum < 10) {
+                            return "translate(10,3)";
+                          } else {
+                            return "translate(-115,0)";
+                          }
                         });
                         
                       return "translate(" + mouse[0] + "," + pos.y +")";
