@@ -162,12 +162,14 @@
             // Write and draw the chart
             function makeDataViz(data) {
 
+              // Define margins
               var svg = d3.select("svg"),
                 margin = {top: 0, right: 150, bottom: 50, left: 0},
                 width = svg.attr("width") - margin.left - margin.right,
                 height = svg.attr("height") - margin.top - margin.bottom,
                 g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+              // Define scales
               var x = d3.scaleLinear().range([0, width]),
                   y = d3.scaleLinear().range([height, 0]),
                   z = d3.scaleOrdinal(d3.schemeCategory10);
@@ -189,7 +191,7 @@
                 }
               }
 
-              // Returns last week for index
+              // Returns last week for its index
               function findLastPost(yr) {
                 for (var i = 0; i <= data.length - 1; i++) {
                   if (data[i].yr == yr) { // Get year with NaN
@@ -204,7 +206,7 @@
                 }
               }
 
-              // Returns last posting count
+              // Returns last available posting count
               function findMaxPost(d) {
                 for (var mp = 0; mp <= data.length - 1; mp++) {
                   for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
@@ -220,10 +222,8 @@
                 }
               }
 
-              /* 
-              * Hacky solutions for NaNs: 
-              * findLastPost() & findMaxPost()
-              */
+              // Define lines
+              // Hacky solutions for NaNs: findLastPost() & findMaxPost()
               var line = d3.line()
                   .curve(d3.curveBasis)
                   .x(function(d) {
@@ -233,6 +233,7 @@
                     return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings); 
                   });
 
+              // Format data
               var marketYears = data.map(function(d) {
                 var wkD = d.wks;
                 var week = 0;
@@ -249,6 +250,7 @@
                 };
               });
 
+              // Set the domains of the axes
               x.domain([ 
                 parseInt(marketYears[0].values[0].week),
                 parseInt(marketYears[marketYears.length - 1].values[marketYears[marketYears.length - 1].values.length - 1].week)
@@ -261,6 +263,7 @@
 
               z.domain(marketYears.map(function(c) { return c.id; }));
 
+              // Define the legend
               var legend = svg.selectAll('g')
                 .data(marketYears, function(d){ return d; })
                 .enter()
@@ -287,9 +290,11 @@
                 .text(function(d) {
                   return d.id;
                 });
+
               d3.selectAll(".legend")
                 .attr("transform", "translate(0,300)");
 
+              // Draw axes
               g.append("g")
                   .attr("class", "axis axis--x")
                   .attr("transform", "translate(0," + height + ")")
@@ -322,6 +327,7 @@
                   })
                   .style("stroke", function(marketYears) { return z(marketYears.id); });
 
+              // Create labels
               markYear.append("text")
                   .datum(function(d) {
                     return {
@@ -337,8 +343,7 @@
                   })
                   .attr("x", 50)
                   .attr("dy", "0.5em")
-                  .style("font", "12px sans-serif")
-                  // .text(function(d) { return d.id });
+                  .style("font", "12px sans-serif");
 
 
               /** Mouseover line and circle effect
