@@ -52,7 +52,6 @@
             // Get and format spreadsheet data
             formatData();
             function formatData() {
-              // Get Spreadsheet data
               // ID of the Google Spreadsheet
               var spreadsheetID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w";
                
@@ -113,7 +112,7 @@
                   }
                   makeYears();
 
-                  // Create year specific data with week datapoints
+                  // Create year-specific data with week datapoints
                   function makeYears() {
                     yr1213 = {
                       yr:"2012 - 2013",
@@ -162,7 +161,7 @@
             // Write and draw the chart
             function makeDataViz(data) {
 
-              // Define margins
+              // Define SVG margins
               var svg = d3.select("svg"),
                 margin = {top: 0, right: 150, bottom: 50, left: 0},
                 width = svg.attr("width") - margin.left - margin.right,
@@ -178,7 +177,7 @@
               function findMaxLastWeek(d) {
                 for (var mp = 0; mp <= data.length - 1; mp++) {
                   for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
-
+                    // Find first NaN instance and return
                     if ( Number.isNaN(data[mp].wks[mw]) ) {
                       function firstNaN(element) {
                         return Number.isNaN(element);
@@ -186,7 +185,6 @@
                       var week = data[mp].wks.findIndex(firstNaN);
                       return week;
                     }
-
                   }
                 }
               }
@@ -210,14 +208,12 @@
               function findMaxPost(d) {
                 for (var mp = 0; mp <= data.length - 1; mp++) {
                   for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
-
                     if ( Number.isNaN(data[mp].wks[mw]) ) {
                       var lastMaxPost = findLastPost(data[mp].yr);
                       var weekIndex = lastMaxPost - 1;
                       var lmp = data[mp].wks[weekIndex];
                       return lmp;
                     }
-
                   }
                 }
               }
