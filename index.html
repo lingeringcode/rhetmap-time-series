@@ -173,15 +173,17 @@
                   y = d3.scaleLinear().range([height, 0]),
                   z = d3.scaleOrdinal(d3.schemeCategory10);
 
+              // Find and return first instance of NaN in an array
+              function firstNaN(element) {
+                return Number.isNaN(element);
+              }
+
               // Returns last week with posting
               function findMaxLastWeek(d) {
                 for (var mp = 0; mp <= data.length - 1; mp++) {
                   for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
                     // Find first NaN instance and return
                     if ( Number.isNaN(data[mp].wks[mw]) ) {
-                      function firstNaN(element) {
-                        return Number.isNaN(element);
-                      }
                       var week = data[mp].wks.findIndex(firstNaN);
                       return week;
                     }
@@ -189,23 +191,19 @@
                 }
               }
 
-              // Returns last week for its index
-              function findLastPost(yr) {
-                for (var i = 0; i <= data.length - 1; i++) {
-                  if (data[i].yr == yr) { // Get year with NaN
-                    for (var j = 0; j <= data[i].wks.length - 1; j++) {
-                      function firstNaN(element) {
-                        return Number.isNaN(element);
+              // Returns last available posting count
+              function findMaxPost(d) {
+                // Returns last week for its index
+                function findLastPost(yr) {
+                  for (var i = 0; i <= data.length - 1; i++) {
+                    if (data[i].yr == yr) { // Get year with NaN
+                      for (var j = 0; j <= data[i].wks.length - 1; j++) {
+                        var key = data[i].wks.findIndex(firstNaN);
+                        return key;
                       }
-                      var key = data[i].wks.findIndex(firstNaN);
-                      return key;
                     }
                   }
                 }
-              }
-
-              // Returns last available posting count
-              function findMaxPost(d) {
                 for (var mp = 0; mp <= data.length - 1; mp++) {
                   for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
                     if ( Number.isNaN(data[mp].wks[mw]) ) {
@@ -219,7 +217,7 @@
               }
 
               // Define lines
-              // Hacky solutions for NaNs: findLastPost() & findMaxPost()
+              // Hacky solutions for NaNs: findMaxLastWeek() & findMaxPost()
               var line = d3.line()
                   .curve(d3.curveBasis)
                   .x(function(d) {
