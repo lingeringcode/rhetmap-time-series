@@ -73,6 +73,7 @@ a {
 	padding: 15px;
 	background-color: rgba(182, 153, 209, 0.25);
 	list-style-type: none;
+	font-weight: 400;
 }
 
 #citations ul li {
