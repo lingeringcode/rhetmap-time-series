@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -145,13 +144,13 @@
                   }
 
                 } else {
-                  // We reached our target server, but it returned an error
+                  // Target server reached, but it returned an error
                   console.log("connection error")
                 }
               };
 
               request.onerror = function() {
-                // There was a connection error of some sort
+                // Connection error
                 console.log("connection error")
               };
 
@@ -340,8 +339,11 @@
                   .style("font", "12px sans-serif");
 
 
-              /** Mouseover line and circle effect
+              /**
+              * 
+              *   Mouseover line and circle effect
               *   Modified from src: http://stackoverflow.com/questions/34886070/multiseries-line-chart-with-mouseover-tooltip/34887578#34887578
+              * 
               **/
               var mouseG = svg.append("g")
                 .attr("class", "mouse-over-effects");
@@ -460,6 +462,20 @@
                 });
             }
           </script>
+
+          <div id="citations">
+            <h3>
+              Citations
+            </h3>
+            <ul>
+              <li>
+                Data visualization created by <a href="http://clindgrencv.com/" target="_blank">Chris Lindgren</a>. 
+              <li>
+                Data from Jim Ridolfo's "RhetMap - Market Comparison" spreadsheet: <a href="http://rhetmap.org/market-comparison/" target="_blank">http://rhetmap.org/market-comparison/</a>.
+              <li>
+                See the code and references within the code in the repository hosted on Github: <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank">https://github.com/lingeringcode/rhetmap-time-series</a>.
+            </ul>
+          </div>
 
           <div id="computed-values">
             <h3>
