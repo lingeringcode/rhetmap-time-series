@@ -14,7 +14,7 @@ Place to consider new datapoints and how to use them. Please feel free to sugges
 ### Denote certain traits of position:
 - University research rank: R1-3.
   + Compare when certain univs. post ads.
-- Techcomm, Rhetoric, WPA, Writing Center, Postdoc
-- Teaching load
-- Position foci
+- Position type: Techcomm, Rhetoric, WPA, Writing Center, Postdoc
+- Teaching load: 2/2, 2/3, 3/3, etc.
+- Position foci: generalist, rhetoric of science, digital rhetoric, professional writing, public policy, etc.
   + Noted how 2016-2017 seemed to include many rhetoric of science calls.
