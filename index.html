@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rhetoric, Composition, and Technical Communication Job Postings per Year</title>
     <meta name="description" content="Rhetoric, Composition, and Technical Communication Job Postings per Year" />
     <meta name="keywords" content="rhetoric and composition, job market, infographic, d3.js" />
@@ -12,8 +12,8 @@
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css' />
 
-    <script type="text/javascript" src="js/modernizr.custom.79639.js"></script> 
-    <!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->  
+    <script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
+    <!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
     <!-- js libs -->
     <script src="//d3js.org/d3.v4.min.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
@@ -23,7 +23,7 @@
       <header>
         <h1>Rhetoric, Composition, and Technical Communication Job Postings per Year</h1>
       </header>
-        
+
       <section class="main">
         <div id="chart-container">
           <style>
@@ -43,7 +43,7 @@
             }
           </style>
           <svg width="1080" height="500"></svg>
-          
+
           <script type="text/javascript">
             var myData = [];
             var fullMarketData = [];
@@ -53,8 +53,8 @@
             function formatData() {
               // ID of the Google Spreadsheet
               var spreadsheetID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w";
-               
-              // Make sure it is public or set to Anyone with link can view 
+
+              // Make sure it is public or set to Anyone with link can view
               var rurl = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
 
               // Spreadsheet data request
@@ -74,12 +74,15 @@
                   var yr1415wks = [];
                   var yr1516wks = [];
                   var yr1617wks = [];
+                  var yr1718wks = [];
+
                   // Dicts for year data
                   var yr1213 = {};
                   var yr1314 = {};
                   var yr1415 = {};
                   var yr1516 = {};
                   var yr1617 = {};
+                  var yr1718 = {};
 
                   // Get length of JSON object
                   var length = 0;
@@ -93,7 +96,8 @@
                       yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
                       yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
                       yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
-                      yr1617wks.push((data.feed.entry[i].gsx$rctbw_4.$t).slice(8,10));
+                      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
+                      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
                     }
                     else {
                       week = data.feed.entry[i].gsx$_cn6ca.$t;
@@ -101,11 +105,12 @@
                       yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
                       yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
                       yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
-                      if (data.feed.entry[i].gsx$rctbw_4.$t === "") {
-                        yr1617wks.push(Number.NaN);
+                      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
+                      if (data.feed.entry[i].gsx$rctbw_5.$t === "") {
+                        yr1718wks.push(Number.NaN);
                       }
                       else {
-                        yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
+                        yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
                       }
                     }
                   }
@@ -133,12 +138,16 @@
                       yr:"2016 - 2017",
                       wks:yr1617wks
                     };
+                    yr1718 = {
+                      yr:"2017 - 2018",
+                      wks:yr1718wks
+                    };
                     makeMarketData();
                   }
 
                   // Join all dicts to one array object
                   function makeMarketData() {
-                    fullMarketData.push(yr1213,yr1314,yr1415,yr1516,yr1617);
+                    fullMarketData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718);
                     myData = fullMarketData;
                     makeDataViz(myData);
                   }
@@ -223,7 +232,7 @@
                     return x( Number.isNaN(d.postings) ? findMaxLastWeek(d) : d.week);
                   })
                   .y(function(d) {
-                    return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings); 
+                    return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings);
                   });
 
               // Format data
@@ -238,19 +247,19 @@
                     } else {
                       return { week: week+=1, postings: f };
                     }
-                    
+
                   })
                 };
               });
 
               // Set the domains of the axes
-              x.domain([ 
+              x.domain([
                 parseInt(marketYears[0].values[0].week),
                 parseInt(marketYears[marketYears.length - 1].values[marketYears[marketYears.length - 1].values.length - 1].week)
               ]);
 
               y.domain([
-                d3.min(marketYears, function(c) { return d3.min(c.values, function(d) { return parseInt(d.postings); }); }),
+                d3.min(marketYears, function(c) { return 0; }),
                 d3.max(marketYears, function(c) { return d3.max(c.values, function(d) { return parseInt(d.postings); }); })
               ]);
 
@@ -324,14 +333,14 @@
               markYear.append("text")
                   .datum(function(d) {
                     return {
-                      id: d.id, 
+                      id: d.id,
                       value: d.values[d.values.length - 1]
-                    }; 
+                    };
                   })
                   .attr("transform", function(d) {
                     return "translate("
                               + x( Number.isNaN(d.value.postings) ? findMaxLastWeek(d) : d.value.week )
-                              + "," 
+                              + ","
                               + y( Number.isNaN(d.value.postings) ? findMaxPost(d) : d.value.postings) + ")";
                   })
                   .attr("x", 50)
@@ -340,10 +349,10 @@
 
 
               /**
-              * 
+              *
               *   Mouseover line and circle effect
               *   Modified from src: http://stackoverflow.com/questions/34886070/multiseries-line-chart-with-mouseover-tooltip/34887578#34887578
-              * 
+              *
               **/
               var mouseG = svg.append("g")
                 .attr("class", "mouse-over-effects");
@@ -353,7 +362,7 @@
                 .style("stroke", "black")
                 .style("stroke-width", "1px")
                 .style("opacity", "0");
-                
+
               var lines = document.getElementsByClassName('line');
 
               var mousePerLine = mouseG.selectAll('.mouse-per-line')
@@ -408,10 +417,10 @@
 
                       var xDate = x.invert(mouse[0]),
                           bisect = d3.bisector(function(d) {
-                            return d.postings; 
+                            return d.postings;
                           }).right;
                           idx = bisect(d.values, xDate);
-                      
+
                       var beginning = 0,
                           end = lines[i].getTotalLength(),
                           target = null;
@@ -426,7 +435,7 @@
                         else if (pos.x < mouse[0]) beginning = target;
                         else break; //position found
                       }
-                      
+
                       // Add mouseover label
                       d3.select(this).select('text')
                         .text(function(d) {
@@ -456,7 +465,7 @@
                             return "translate(-115,0)";
                           }
                         });
-                        
+
                       return "translate(" + mouse[0] + "," + pos.y +")";
                     });
                 });
@@ -469,7 +478,7 @@
             </h3>
             <ul>
               <li>
-                Data visualization created by <a href="http://clindgrencv.com/" target="_blank">Chris Lindgren</a>. 
+                Data visualization created by <a href="http://clindgrencv.com/" target="_blank">Chris Lindgren</a>.
               <li>
                 Data from Jim Ridolfo's "RhetMap - Market Comparison" spreadsheet: <a href="http://rhetmap.org/market-comparison/" target="_blank">http://rhetmap.org/market-comparison/</a>.
               <li>
@@ -542,7 +551,7 @@
 
               </tbody>
             </table>
-            
+
             <h3>
               Percentage of season advertised by Jan 3rd:
             </h3>
