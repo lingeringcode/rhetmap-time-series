@@ -48,9 +48,9 @@
             var myData = [];
             var fullMarketData = [];
 
-            // Get and format spreadsheet data
-            formatData();
-            function formatData() {
+            // Get the Google sheet data
+            getData();
+            function getData() {
               // ID of the Google Spreadsheet
               var spreadsheetID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w";
 
@@ -64,99 +64,16 @@
 
               request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
-
-                  // Success! Got the data
+                  // Success! Got the data.
+                  // Format request object as standard JSON
                   var data = JSON.parse(request.responseText);
-                  var week;
-                  // Arrays for week data
-                  var yr1213wks = [];
-                  var yr1314wks = [];
-                  var yr1415wks = [];
-                  var yr1516wks = [];
-                  var yr1617wks = [];
-                  var yr1718wks = [];
-
-                  // Dicts for year data
-                  var yr1213 = {};
-                  var yr1314 = {};
-                  var yr1415 = {};
-                  var yr1516 = {};
-                  var yr1617 = {};
-                  var yr1718 = {};
-
-                  // Get length of JSON object
-                  var length = 0;
-                  for(var k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++;
-
-                  // Put week data in array sorted by market years
-                  for (var i = 0; i <= length - 1; i++) {
-                    if (i === 0) {
-                      week = data.feed.entry[i].gsx$_cn6ca.$t;
-                      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
-                      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
-                      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
-                      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
-                      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
-                      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
-                    }
-                    else {
-                      week = data.feed.entry[i].gsx$_cn6ca.$t;
-                      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
-                      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
-                      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
-                      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
-                      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
-                      if (data.feed.entry[i].gsx$rctbw_5.$t === "") {
-                        yr1718wks.push(Number.NaN);
-                      }
-                      else {
-                        yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
-                      }
-                    }
-                  }
-                  makeYears();
-
-                  // Create year-specific data with week datapoints
-                  function makeYears() {
-                    yr1213 = {
-                      yr:"2012 - 2013",
-                      wks:yr1213wks
-                    };
-                    yr1314 = {
-                      yr:"2013 - 2014",
-                      wks:yr1314wks
-                    };
-                    yr1415 = {
-                      yr:"2014 - 2015",
-                      wks:yr1415wks
-                    };
-                    yr1516 = {
-                      yr:"2015 - 2016",
-                      wks:yr1516wks
-                    };
-                    yr1617 = {
-                      yr:"2016 - 2017",
-                      wks:yr1617wks
-                    };
-                    yr1718 = {
-                      yr:"2017 - 2018",
-                      wks:yr1718wks
-                    };
-                    makeMarketData();
-                  }
-
-                  // Join all dicts to one array object
-                  function makeMarketData() {
-                    fullMarketData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718);
-                    myData = fullMarketData;
-                    makeDataViz(myData);
-                  }
-
+                  // Send data to the formatData function
+                  formatData(data);
                 } else {
-                  // Target server reached, but it returned an error
-                  console.log("connection error")
+                  // Another possible error
+                  console.log("Target server reached, but it returned an error.")
                 }
-              };
+              }
 
               request.onerror = function() {
                 // Connection error
@@ -165,6 +82,114 @@
 
               request.send();
             }
+            // Get and format spreadsheet data
+            function formatData(data) {
+              console.log("Retrieved spreadsheet data:\n");
+              console.log(data);
+              var week;
+              // Arrays for week data
+              var yr1213wks = [];
+              var yr1314wks = [];
+              var yr1415wks = [];
+              var yr1516wks = [];
+              var yr1617wks = [];
+              var yr1718wks = [];
+              var yr1819wks = [];
+
+              // Dicts for year data
+              var yr1213 = {};
+              var yr1314 = {};
+              var yr1415 = {};
+              var yr1516 = {};
+              var yr1617 = {};
+              var yr1718 = {};
+              var yr1819 = {};
+
+              // Get length of JSON object
+              var length = 0;
+              for(var k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++;
+
+              // Put week data in array sorted by market years
+              for (var i = 0; i <= length - 1; i++) {
+                if (i === 0) {
+                  week = data.feed.entry[i].gsx$_cn6ca.$t;
+                  yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
+                  yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
+                  yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
+                  yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
+                  yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
+                  yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
+                  if (data.feed.entry[i].gsx$rctbw_6.$t === "") {
+                    yr1819wks.push(Number.NaN);
+                  }
+                  else {
+                    yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
+                  }
+                }
+                else {
+                  // week = data.feed.entry[i].gsx$_cn6ca.$t;
+                  yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
+                  yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
+                  yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
+                  yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
+                  yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
+                  yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
+                  if (data.feed.entry[i].gsx$rctbw_6.$t === "") {
+                    yr1819wks.push(Number.NaN);
+                  }
+                  else {
+                    yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
+                  }
+                }
+                console.log("Writing yr1213wks, ignoring the rest of the data:\n");
+                console.log(yr1213wks);
+              }
+              makeYears();
+
+              // Create year-specific data with week datapoints
+              function makeYears() {
+                yr1213 = {
+                  yr:"2012 - 2013",
+                  wks:yr1213wks
+                };
+                yr1314 = {
+                  yr:"2013 - 2014",
+                  wks:yr1314wks
+                };
+                yr1415 = {
+                  yr:"2014 - 2015",
+                  wks:yr1415wks
+                };
+                yr1516 = {
+                  yr:"2015 - 2016",
+                  wks:yr1516wks
+                };
+                yr1617 = {
+                  yr:"2016 - 2017",
+                  wks:yr1617wks
+                };
+                yr1718 = {
+                  yr:"2017 - 2018",
+                  wks:yr1718wks
+                };
+                yr1819 = {
+                  yr:"2018 - 2019",
+                  wks:yr1819wks
+                };
+                console.log("yr1213:\n");
+                console.log(yr1213);
+                makeMarketData();
+              }
+
+              // Join all dicts to one array object
+              function makeMarketData() {
+                fullMarketData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819);
+                myData = fullMarketData;
+                console.log("myData:\n");
+                console.log(myData);
+                makeDataViz(myData);
+              }
+            };
 
             // Write and draw the chart
             function makeDataViz(data) {
@@ -179,7 +204,7 @@
               // Define scales
               var x = d3.scaleLinear().range([0, width]),
                   y = d3.scaleLinear().range([height, 0]),
-                  z = d3.scaleOrdinal(d3.schemeCategory10);
+                  z = d3.scaleOrdinal(d3.schemeCategory20);
 
               // Find and return first instance of NaN in an array
               function firstNaN(element) {
@@ -259,7 +284,7 @@
               ]);
 
               y.domain([
-                d3.min(marketYears, function(c) { return 0; }),
+                d3.min(marketYears, function(c) { return 20; }),
                 d3.max(marketYears, function(c) { return d3.max(c.values, function(d) { return parseInt(d.postings); }); })
               ]);
 
@@ -469,6 +494,7 @@
                     });
                 });
             }
+
           </script>
 
           <div id="citations">
@@ -553,7 +579,16 @@
                     2017-2018
                   </td>
                   <td class="fifteen">
-                    N/A
+                    280
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2018-2019
+                  </td>
+                  <td class="fifteen">
+                    n/a
                   </td>
                 </tr>
 
@@ -627,7 +662,16 @@
                     2017-2018
                   </td>
                   <td class="fifteen">
-                    N/A
+                    70.71%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2018-2019
+                  </td>
+                  <td class="fifteen">
+                    n/a
                   </td>
                 </tr>
 
