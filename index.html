@@ -195,12 +195,12 @@
                 yrData = fullYearData;
                 console.log("yrData:\n");
                 console.log(yrData);
-                drawDataViz(yrData);
+                paintDataViz(yrData);
               }
             };
 
             // Write and draw the chart
-            function drawDataViz(data) {
+            function paintDataViz(data) {
 
               // Define SVG margins
               var svg = d3.select("svg"),
