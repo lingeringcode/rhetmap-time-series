@@ -45,9 +45,6 @@
           <svg width="1080" height="500"></svg>
 
           <script type="text/javascript">
-            var myData = [];
-            var fullMarketData = [];
-
             // Get the Google sheet data
             getData();
             function getData() {
@@ -60,8 +57,10 @@
               // Spreadsheet data request
               // src: https://spreadsheets.google.com/feeds/list/1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w/od6/public/values?alt=json
               var request = new XMLHttpRequest();
+              // Open the URL: rurl
               request.open('GET', rurl, true);
 
+              // When it loads, format it.
               request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
                   // Success! Got the data.
@@ -75,12 +74,18 @@
                 }
               }
 
+              // If an error occurs, tell us.
               request.onerror = function() {
                 // Connection error
                 console.log("connection error")
               };
 
-              request.send();
+              /*
+              * I do not need to "send" anything back to the server,
+              * but this .send() method is still required,
+              * so I send a "null" value.
+              */
+              request.send(null);
             }
             // Get and format spreadsheet data
             function formatData(data) {
@@ -144,10 +149,10 @@
                 console.log("Writing yr1213wks, ignoring the rest of the years:\n");
                 console.log(yr1213wks);
               }
-              makeYears();
+              writeYears();
 
               // Create year-specific data with week datapoints
-              function makeYears() {
+              function writeYears() {
                 yr1213 = {
                   yr:"2012 - 2013",
                   wks:yr1213wks
@@ -178,16 +183,19 @@
                 };
                 console.log("yr1213:\n");
                 console.log(yr1213);
-                makeMarketData();
+                writeMarketData();
               }
 
               // Join all dicts to one array object
-              function makeMarketData() {
-                fullMarketData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819);
-                myData = fullMarketData;
-                console.log("myData:\n");
-                console.log(myData);
-                makeDataViz(myData);
+              function writeMarketData() {
+                // Define explicit data-types for per Year data
+                var yrData = [];
+                var fullYearData = [];
+                fullYearData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819);
+                yrData = fullYearData;
+                console.log("yrData:\n");
+                console.log(yrData);
+                makeDataViz(yrData);
               }
             };
 
