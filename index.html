@@ -15,7 +15,7 @@
     <script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
     <!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
     <!-- js libs -->
-    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="js/d3.v4.min.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
   </head>
   <body>
@@ -45,7 +45,11 @@
           <svg width="1080" height="500"></svg>
 
           <script type="text/javascript">
-            // Get the Google sheet data
+
+            ////////////////////////////////////////////////////////////
+            //////////// Get the Google sheet data /////////////////////
+            ////////////////////////////////////////////////////////////
+
             getData();
             function getData() {
               // ID of the Google Spreadsheet
@@ -92,7 +96,11 @@
               */
               request.send(null);
             }
-            // Get and format spreadsheet data
+
+            ////////////////////////////////////////////////////////////
+            //////////// Format the newly retrieved data ///////////////
+            ////////////////////////////////////////////////////////////
+
             function formatData(data) {
               console.log("Retrieved spreadsheet data:\n");
               console.log(data);
@@ -137,7 +145,7 @@
                   }
                 }
                 else {
-                  // week = data.feed.entry[i].gsx$_cn6ca.$t;
+                  week = data.feed.entry[i].gsx$_cn6ca.$t;
                   yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
                   yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
                   yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
@@ -151,7 +159,7 @@
                     yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
                   }
                 }
-                console.log("Writing yr1213wks, ignoring the rest of the years:\n");
+                console.log("Writing out the weeks for each year. Here\'s yr1213wks:\n");
                 console.log(yr1213wks);
               }
               writeYears();
@@ -204,31 +212,50 @@
               }
             };
 
-            // Write and draw the chart
+            ////////////////////////////////////////////////////////////
+            //////////// Write and paint the chart /////////////////////
+            ////////////////////////////////////////////////////////////
+
             function paintDataViz(data) {
 
-              // Define SVG margins
+              // Define the dimensions of the SVG
               var svg = d3.select("svg"),
                 margin = {top: 0, right: 150, bottom: 50, left: 0},
                 width = svg.attr("width") - margin.left - margin.right,
                 height = svg.attr("height") - margin.top - margin.bottom,
                 g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-              // Define scales
+              // Define the x & y ranges and color scale
               var x = d3.scaleLinear().range([0, width]),
                   y = d3.scaleLinear().range([height, 0]),
                   z = d3.scaleOrdinal(d3.schemeCategory20);
 
-              // Find and return first instance of NaN in an array
-              function firstNaN(element) {
-                return Number.isNaN(element);
+              /*
+
+              * Below are 3 functions that help the subsequently
+              * written d3.line() method. FYI, JS requires that
+              * such functions be written before their use in the
+              * code.
+
+              * firstNaN: Find and return first instance
+              * of NaN (empty spreadsheet cell value) in
+              * an array, which will be from the new
+              * market year.
+
+              */
+              function firstNaN(wkValue) {
+                return Number.isNaN(wkValue);
               }
 
-              // Returns last week with posting
+              /*
+              * findMaxLastWeek: Find and return last posting,
+              * which helps year, which has cell values with
+              * no value yet.
+              */
               function findMaxLastWeek(d) {
                 for (var mp = 0; mp <= data.length - 1; mp++) {
                   for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
-                    // Find first NaN instance and return
+                    // Find first NaN instance and return it if TRUE
                     if ( Number.isNaN(data[mp].wks[mw]) ) {
                       var week = data[mp].wks.findIndex(firstNaN);
                       return week;
@@ -262,7 +289,7 @@
                 }
               }
 
-              // Define lines
+              // Define x & y values for each line
               // Hacky solutions for NaNs: findMaxLastWeek() & findMaxPost()
               var line = d3.line()
                   .curve(d3.curveBasis)
@@ -273,7 +300,7 @@
                     return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings);
                   });
 
-              // Format data
+              // Format data for drawing
               var marketYears = data.map(function(d) {
                 var wkD = d.wks;
                 var week = 0;
