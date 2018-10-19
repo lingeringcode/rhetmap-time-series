@@ -79,14 +79,14 @@
                   formatData(data);
                 } else {
                   // Another possible error
-                  console.log("Target server reached, but it returned an error.")
+                  console.log("Target server reached, but it returned an error.");
                 }
-              }
+              };
 
               // If an error occurs, tell us.
               request.onerror = function() {
                 // Connection error
-                console.log("connection error")
+                console.log("connection error");
               };
 
               /*
