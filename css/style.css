@@ -9,9 +9,7 @@ body{
 	-webkit-font-smoothing: antialiased;
 }
 svg {
-	padding: 50px 50px;
-	padding-top: 15px;
-	margin-bottom: 50px;
+	margin-left: 20px;
 }
 .axis--x path {
 	display: none;
@@ -19,8 +17,10 @@ svg {
 
 .line {
 	fill: none;
-	stroke: steelblue;
 	stroke-width: 2.5px;
+}
+.area {
+	opacity: 0.95;
 }
 a {
 	color: #555;
@@ -99,7 +99,7 @@ a:hover {
 
 svg {
 	font-family: 'Lato', Arial, serif;
-	font-size: 10px;
+	font-size: 12px;
 	font-weight: 700;
 	text-shadow: 0 1px 1px rgba(255,255,255,0.8);
 }
@@ -117,9 +117,12 @@ g.context g.axis line {
 }
 
 .axis path, .axis line {
-	fill: none;
-	stroke: #aaa;
+	/* fill: none;
+	stroke: #aaa; */
 	shape-rendering: crispEdges;
+}
+g.markYear path.area {
+	opacity: 0.75;
 }
 
 .brush .extent {

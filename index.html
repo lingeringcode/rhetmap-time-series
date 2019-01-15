@@ -273,8 +273,27 @@
                 }
               }
 
-              // Define x & y values for each line
-              // Hacky solutions for NaNs: findMaxLastWeek() & findMaxPost()
+              // Retrieve year to add as ID to legend elements
+              function addLegendID(d) {
+                var yearID = d.substr(0, 4);
+                return "legend-"+yearID;
+              }
+              /*
+                * Define x & y values for each line and its area
+                * Hacky solutions for NaNs: findMaxLastWeek() & findMaxPost()
+              */
+              // Define the areas for each line
+              var area = d3.area()
+                  .curve(d3.curveBasis)
+                  .x(function(d) {
+                    return x( Number.isNaN(d.postings) ? findMaxLastWeek(d) : d.week);
+                  })
+                  .y0(height)
+                  .y1(function(d) {
+                    return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings);
+                  });
+
+              // Define the lines
               var line = d3.line()
                   .curve(d3.curveBasis)
                   .x(function(d) {
@@ -296,7 +315,6 @@
                     } else {
                       return { week: week+=1, postings: f };
                     }
-
                   })
                 };
               });
@@ -319,12 +337,15 @@
                 .data(marketYears, function(d){ return d; })
                 .enter()
                 .append('g')
-                .attr('class', 'legend');
+                .attr('class', 'legend')
+                .attr("id", function(d){
+                  return addLegendID(d.id);
+                });
 
               legend.append('rect')
                 .attr('x', width - 20)
                 .attr('y', function(d, i) {
-                  return i * 20;
+                  return (i * 20) - 4;
                 })
                 .attr('width', 10)
                 .attr('height', 10)
@@ -335,14 +356,14 @@
               legend.append('text')
                 .attr('x', width - 8)
                 .attr('y', function(d, i) {
-                  return (i * 20) + 9;
+                  return (i * 20) + 5;
                 })
                 .text(function(d) {
-                  return d.id;
+                  return d.id+": ";
                 });
 
               d3.selectAll(".legend")
-                .attr("transform", "translate(0,200)");
+                .attr("transform", "translate(-200,210)");
 
               // Draw axes
               g.append("g")
@@ -370,12 +391,22 @@
                 .enter().append("g")
                   .attr("class", "markYear");
 
+              // Append line
               markYear.append("path")
+                  .attr("class", "area")
                   .attr("class", "line")
                   .attr("d", function(marketYears) {
                     return line(marketYears.values);
                   })
                   .style("stroke", function(marketYears) { return z(marketYears.id); });
+
+              // Append the area
+              markYear.append("path")
+                 .attr("class", "area")
+                 .attr("d", function(marketYears) {
+                   return area(marketYears.values);
+                 })
+                 .style("fill", function(marketYears) { return z(marketYears.id); });
 
               // Create labels
               markYear.append("text")
@@ -393,7 +424,7 @@
                   })
                   .attr("x", 50)
                   .attr("dy", "0.5em")
-                  .style("font", "12px sans-serif");
+                  .style("font", "14px sans-serif");
 
 
               /**
@@ -425,6 +456,7 @@
                   return z(d.postings);
                 })
                 .style("fill", "none")
+                .style("stroke", "black")
                 .style("stroke-width", "1px")
                 .style("opacity", "0");
 
@@ -477,7 +509,7 @@
                         target = Math.floor((beginning + end) / 2);
                         pos = lines[i].getPointAtLength(target);
                         if ((target === end || target === beginning) && pos.x !== mouse[0]) {
-                            break;
+                          break;
                         }
                         if (pos.x > mouse[0])      end = target;
                         else if (pos.x < mouse[0]) beginning = target;
@@ -485,21 +517,24 @@
                       }
 
                       // Add mouseover label
-                      d3.select(this).select('text')
+                      legend.select('text')
                         .text(function(d) {
                           var weekNum = xDate.toFixed(0);
                           var postNum = d.values[(parseInt(xDate.toFixed(0))-1)].postings;
+                          var yrID = d.id;
                           var label;
 
                           if (Number.isNaN(postNum)) {
-                            label = 'Week: '
+                            label = yrID
+                                      +': Week: '
                                       +weekNum
-                                      +'\nPostings: '
+                                      +', Postings: '
                                       +'N/A';
                           } else {
-                            label = 'Week: '
+                            label = yrID
+                                      +': Week: '
                                       +weekNum
-                                      +'\nPostings: '
+                                      +', Postings: '
                                       +postNum;
                           }
 
@@ -507,11 +542,7 @@
                         })
                         .attr("transform", function(d) {
                           var weekNum = d.values[(parseInt(xDate.toFixed(0))-1)].week;
-                          if (weekNum < 10) {
-                            return "translate(10,3)";
-                          } else {
-                            return "translate(-115,0)";
-                          }
+                          return "translate(5,0)";
                         });
 
                       return "translate(" + mouse[0] + "," + pos.y +")";
