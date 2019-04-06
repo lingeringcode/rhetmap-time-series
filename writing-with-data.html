@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Coding as writing with data</title>
+    <style>
+      li {
+        display:flex;
+        flex-direction: column;
+        align-items: left;
+      }
+      li figure figcaption.context {
+        float: left;
+        font-size: 1.2rem;
+        font-weight: bolder;
+        letter-spacing: 2px;
+        writing-mode: tb-rl;
+      }
+      img {
+        border-left: 1px black solid;
+      }
+      img.console-rc {
+        width: 250px;
+      }
+      img.console-cl {
+        width: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Coding as writing with data</h1>
+    <ol>
+      <li>
+        <p>1. Right click the webpage, and select the Inspect option. This will open the browser's Inspecter Tool.</p>
+        <figure>
+          <figcaption class="context">Context:</figcaption>
+          <img class="console-rc" src="images/right-click-inspect.png" alt="Image of right-clicking action to open the Inspector Tool." />
+        </figure>
+      </li>
+      <li>
+        <p>2. Open the Console log area.</p>
+        <figure>
+          <figcaption class="context">Context:</figcaption>
+          <img class="console-cl" src="images/inspector-console.png" alt="Image of element inspector tool, opening its Console." />
+        </figure>
+      </li>
+      <li>
+        <p>3. Refresh the page, and you will see the following generated log output from the JavaScript written in the &lt;script&gt; element.</p>
+        <figure>
+          <figcaption class="context">Context:</figcaption>
+          <img class="console-cl" src="images/inspector-console-refreshed.png" alt="Image of Console with desired output." />
+        </figure>
+      </li>
+    </ol>
+    <script type="text/javascript">
+      var a="a";var b="b";var c="c";var d="d";
+
+      console.table([a,b,c,d]);
+
+      console.table([[a,b,c,d],[a,b,c,d],[a,b,c,d]]);
+
+      console.table([[a,b,c,d],[a,b,c,d],[a,b,c,d]],[[a,b,c,d],[a,b,c,d],[a,b,c,d]]);
+
+      console.table([[{i:1,v:a},{i:2,v:b},{i:3,v:c},{i:4,v:d}]]);
+    </script>
+  </body>
+</html>
