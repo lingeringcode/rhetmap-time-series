@@ -116,7 +116,7 @@ h3{border-bottom:1px solid #aaa;padding-bottom:.5em;margin-top:1em;}
 h4{margin-top:1.25em;border:1px solid #e0e0e0;padding:0.5em;}
 h5,h6{font-size: 1em;}
 h5{font-style:italic;font-weight:600;margin-top:1.25em;}
-hr{border:1px solid #ddd;}
+hr{border:1px solid #ddd;margin:10px;}
 ul{margin:1em 0 1em 2em;}
 ol{margin:1em 0 1em 2em;}
 ul li,ol li{margin-top:.5em;margin-bottom:.5em;}

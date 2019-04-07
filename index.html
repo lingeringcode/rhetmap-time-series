@@ -113,6 +113,7 @@
 
               // Put week data in array sorted by market years
               for (var i = 0; i <= length - 1; i++) {
+                // Start the writing of the first entries.
                 if (i === 0) {
                   week = data.feed.entry[i].gsx$_cn6ca.$t;
                   yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
@@ -121,6 +122,11 @@
                   yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
                   yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
                   yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
+                  /*
+                    For the new market year, check if cell's empty.
+                    If empty, type as NaN (Not A Number). If value
+                    exists, push the value to the array.
+                  */
                   if (data.feed.entry[i].gsx$rctbw_6.$t === "") {
                     yr1819wks.push(Number.NaN);
                   }
@@ -128,6 +134,7 @@
                     yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
                   }
                 }
+                // After first series of array entries, write the rest.
                 else {
                   week = data.feed.entry[i].gsx$_cn6ca.$t;
                   yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
@@ -136,6 +143,11 @@
                   yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
                   yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
                   yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
+                  /*
+                    For the new market year, check if cell's empty.
+                    If empty, type as NaN (Not A Number). If value
+                    exists, push the value to the array.
+                  */
                   if (data.feed.entry[i].gsx$rctbw_6.$t === "") {
                     yr1819wks.push(Number.NaN);
                   }
