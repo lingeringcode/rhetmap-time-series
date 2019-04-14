@@ -57,9 +57,12 @@
               request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
                   // Success! Got the data.
-                  // Format request object as standard JSON
+                  // Format request.responseText object as standard JSON
                   var data = JSON.parse(request.responseText);
-                  // Send data to the formatData function
+                  console.log("Retrieved spreadsheet data.\n"
+                              +"Parsed it as a JSON object:\n");
+                  console.log(data);
+                  // Call formatData function with JSON data as an argument
                   formatData(data);
                 } else {
                   // Another possible error
@@ -86,10 +89,11 @@
             ////////////////////////////////////////////////////////////
 
             function formatData(data) {
-              console.log("Retrieved spreadsheet data in JSON format:\n");
+              console.log("The requested spreadsheet data in the JSON format\n"
+                          +"has been passed as a parameter for the formatData function:\n");
               console.log(data);
               var week;
-              // Arrays for week data
+              // Instantiate arrays for week data
               var yr1213wks = [];
               var yr1314wks = [];
               var yr1415wks = [];
@@ -98,7 +102,7 @@
               var yr1718wks = [];
               var yr1819wks = [];
 
-              // Dicts for year data
+              // Instantiate dictionaries/object arrays for year data
               var yr1213 = {};
               var yr1314 = {};
               var yr1415 = {};
@@ -155,13 +159,21 @@
                     yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
                   }
                 }
-                console.log("Writing out the weeks for each year. Here\'s yr1213wks:\n");
-                console.log(yr1213wks);
+                console.log("Writing out the 17 weeks for each year.");
               }
+              console.log("After the _for_ loop, here\'s an example array, yr1213wks:\n");
+              console.log(yr1213wks);
               writeYears();
 
-              // Create year-specific data with week datapoints
+              /*
+                Bind week arrays to market years.
+                Note how I don't need to pass anything as an
+                argument for writeYears(), since all of the
+                necessary variables have been declared within
+                the scope of formatData(){...}.
+              */
               function writeYears() {
+                console.log("writeYears() binds the week arrays to market years.")
                 yr1213 = {
                   yr:"2012 - 2013",
                   wks:yr1213wks
@@ -190,20 +202,21 @@
                   yr:"2018 - 2019",
                   wks:yr1819wks
                 };
-                console.log("yr1213:\n");
+                console.log("After writeYears is complete, here\'s an example object array that binds the year string label with the array list of the weekly posting data, yr1213:\n");
                 console.log(yr1213);
                 writeMarketData();
               }
 
-              // Join all dicts to one array object
+              // Join all object arrays as one array object
               function writeMarketData() {
                 // Define explicit data-types for per Year data
                 var yrData = [];
                 var fullYearData = [];
                 fullYearData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819);
                 yrData = fullYearData;
-                console.log("yrData:\n");
+                console.log("writeMarketData() combines all of the yearly object arrays into one complete object array, yrData:\n");
                 console.log(yrData);
+                console.log("\nNow, the data are processed and ready to send as an argument to paintDataViz().");
                 paintDataViz(yrData);
               }
             };
