@@ -328,7 +328,11 @@
                     return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings);
                   });
 
-              // Format data for drawing
+              /*
+                Format data for drawing. This is where
+                the processed data really shines to create
+                the multiple lines for each year. :-)
+              */
               var marketYears = data.map(function(d) {
                 var wkD = d.wks;
                 var week = 0;
