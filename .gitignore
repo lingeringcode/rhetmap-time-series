@@ -1,4 +1,16 @@
 # Files to ignore
-
 article.md
 overviews.txt
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+\#*#
+.#*
+.coverage

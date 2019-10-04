@@ -101,6 +101,7 @@
               var yr1617wks = [];
               var yr1718wks = [];
               var yr1819wks = [];
+              var yr1920wks = [];
 
               // Instantiate dictionaries/object arrays for year data
               var yr1213 = {};
@@ -110,6 +111,7 @@
               var yr1617 = {};
               var yr1718 = {};
               var yr1819 = {};
+              var yr1920 = {};
 
               // Get length of JSON object
               var length = 0;
@@ -126,16 +128,17 @@
                   yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
                   yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
                   yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
+                  yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
                   /*
                     For the new market year, check if cell's empty.
                     If empty, type as NaN (Not A Number). If value
                     exists, push the value to the array.
                   */
-                  if (data.feed.entry[i].gsx$rctbw_6.$t === "") {
-                    yr1819wks.push(Number.NaN);
+                  if (data.feed.entry[i].gsx$rctbw_7.$t === "") {
+                    yr1920wks.push(Number.NaN);
                   }
                   else {
-                    yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
+                    yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
                   }
                 }
                 // After first series of array entries, write the rest.
@@ -147,16 +150,17 @@
                   yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
                   yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
                   yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
+                  yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
                   /*
                     For the new market year, check if cell's empty.
                     If empty, type as NaN (Not A Number). If value
                     exists, push the value to the array.
                   */
-                  if (data.feed.entry[i].gsx$rctbw_6.$t === "") {
-                    yr1819wks.push(Number.NaN);
+                  if (data.feed.entry[i].gsx$rctbw_7.$t === "") {
+                    yr1920wks.push(Number.NaN);
                   }
                   else {
-                    yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
+                    yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
                   }
                 }
                 console.log("Writing out the 17 weeks for each year.");
@@ -202,6 +206,10 @@
                   yr:"2018 - 2019",
                   wks:yr1819wks
                 };
+                yr1920 = {
+                  yr:"2019 - 2020",
+                  wks:yr1920wks
+                };
                 console.log("After writeYears is complete, here\'s an example object array that binds the year string label with the array list of the weekly posting data, yr1213:\n");
                 console.log(yr1213);
                 writeMarketData();
@@ -212,7 +220,7 @@
                 // Define explicit data-types for per Year data
                 var yrData = [];
                 var fullYearData = [];
-                fullYearData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819);
+                fullYearData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819,yr1920);
                 yrData = fullYearData;
                 console.log("writeMarketData() combines all of the yearly object arrays into one complete object array, yrData:\n");
                 console.log(yrData);
@@ -587,7 +595,7 @@
             </h3>
             <ul>
               <li>
-                Data visualization created by <a href="http://clindgrencv.com/" target="_blank" rel="noopener">Chris Lindgren</a>.
+                Data visualization created by <a href="https://clndgrn.com/" target="_blank" rel="noopener">Chris Lindgren</a>.
               <li>
                 Data from Jim Ridolfo's "RhetMap - Market Comparison" spreadsheet: <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">http://rhetmap.org/market-comparison/</a>.
               <li>
@@ -672,6 +680,15 @@
                     2018-2019
                   </td>
                   <td class="fifteen">
+                    220
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2019-2020
+                  </td>
+                  <td class="fifteen">
                     n/a
                   </td>
                 </tr>
@@ -753,6 +770,15 @@
                 <tr>
                   <td class="fifteen">
                     2018-2019
+                  </td>
+                  <td class="fifteen">
+                    69.54%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2019-2020
                   </td>
                   <td class="fifteen">
                     n/a
