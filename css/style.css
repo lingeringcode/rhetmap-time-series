@@ -2,7 +2,6 @@
 
 body{
 	font-family: 'Lato', Arial, serif;
-	background: #ddd url(../images/bg.jpg) repeat top left;
 	font-weight: 300;
 	font-size: 14px;
 	color: #000;
@@ -97,11 +96,10 @@ a:hover {
 	margin-bottom: 5px;
 }
 
-svg {
+svg#line-chart {
 	font-family: 'Lato', Arial, serif;
 	font-size: 12px;
 	font-weight: 700;
-	text-shadow: 0 1px 1px rgba(255,255,255,0.8);
 }
 
 g.context g.brush rect.background {
@@ -135,6 +133,56 @@ g.context rect.background{
 	fill: rgb(200,200,255);
 	visibility: visible !important;
 }​
+
+/* BAR CHART */
+text{
+  font-size: 16px;
+  font-family: Open Sans, sans-serif;
+}
+text.title{
+  font-size: 24px;
+  font-weight: 500;
+}
+  text.subTitle{
+		font-size: 18px;
+    font-weight: 500;
+    fill: #272626;
+  }
+  text.caption{
+    font-weight: 400;
+    font-size: 14px;
+    fill: #777777;
+  }
+  text.label{
+    font-weight: 600;
+  }
+
+  text.valueLabel{
+    font-weight: 300;
+  }
+
+  text.weekText{
+    font-size: 64px;
+    font-weight: 700;
+    opacity: 0.25;
+  }
+  .tick text {
+    fill: #777777;
+  }
+  .xAxis .tick:nth-child(2) text {
+    text-anchor: start;
+  }
+  .tick line {
+    shape-rendering: CrispEdges;
+    stroke: #dddddd;
+  }
+  .tick line.origin{
+    stroke: #aaaaaa;
+  }
+  path.domain{
+    display: none;
+  }
+
 
 /* -----------------------------------------------------------------------------
 
