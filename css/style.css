@@ -138,10 +138,7 @@ g.context rect.background{
 div#bar-chart {
 	margin-bottom: 50px;
 }
-text{
-  font-size: 16px;
-  font-family: Open Sans, sans-serif;
-}
+
 text.title{
   font-size: 24px;
   font-weight: 500;

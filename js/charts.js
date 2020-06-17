@@ -422,45 +422,39 @@ function formatData(data) {
 ////////////////////////////////////////////////////////////
 
 // BAR CHART
+var svg = d3.select("#bar-chart").append("svg")
+  .attr("width", 960)
+  .attr("height", 600);
+
+var tickDuration = 2500;
+
+var top_n = 12;
+var height = 600;
+var width = 960;
+
+const margin = {
+  top: 80,
+  right: 0,
+  bottom: 5,
+  left: 0
+};
+
+let barPadding = (height-(margin.bottom+margin.top))/(top_n*5);
+  
+let title = svg.append('text')
+  .attr('class', 'title')
+  .attr('y', 24)
+  .html('Bar \"Race\" Chart: Comparing each year\'s job postings per week');
+
+let caption = svg.append('text')
+  .attr('class', 'caption')
+  .attr('x', width)
+  .attr('y', height-5)
+  .style('text-anchor', 'end')
+  .html('Source: <a href="http://rhetmap.org/market-comparison/">rhetmap.org</a>');
+
+let week = 1;
 function paintBarViz(data) {
-  var svg = d3.select("#bar-chart").append("svg")
-    .attr("width", 960)
-    .attr("height", 600);
-
-  var tickDuration = 2500;
-
-  var top_n = 12;
-  var height = 600;
-  var width = 960;
-
-  const margin = {
-    top: 80,
-    right: 0,
-    bottom: 5,
-    left: 0
-  };
-
-  let barPadding = (height-(margin.bottom+margin.top))/(top_n*5);
-    
-  let title = svg.append('text')
-    .attr('class', 'title')
-    .attr('y', 24)
-    .html('Bar \"Race\" Chart: Comparing each year\'s job postings per week');
-
-  // let subTitle = svg.append("text")
-  //   .attr("class", "subTitle")
-  //   .attr("y", 55)
-  //   .html("Comparing each year's job postings per week");
-
-  let caption = svg.append('text')
-    .attr('class', 'caption')
-    .attr('x', width)
-    .attr('y', height-5)
-    .style('text-anchor', 'end')
-    .html('Source: <a href="http://rhetmap.org/market-comparison/">rhetmap.org</a>');
-
-  let week = 1;
-        
     data.forEach(d => {
       d.posting_total = +d.posting_total,
       d.last_posting_total = +d.last_posting_total,
@@ -662,7 +656,7 @@ function paintBarViz(data) {
     week = week+1;
   }, tickDuration);
 
- }
+}
     
  const halo = function(text, strokeWidth) {
   text.select(function() {
