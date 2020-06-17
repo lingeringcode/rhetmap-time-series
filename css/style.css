@@ -135,6 +135,9 @@ g.context rect.background{
 }​
 
 /* BAR CHART */
+div#bar-chart {
+	margin-bottom: 50px;
+}
 text{
   font-size: 16px;
   font-family: Open Sans, sans-serif;
@@ -143,46 +146,45 @@ text.title{
   font-size: 24px;
   font-weight: 500;
 }
-  text.subTitle{
-		font-size: 18px;
-    font-weight: 500;
-    fill: #272626;
-  }
-  text.caption{
-    font-weight: 400;
-    font-size: 14px;
-    fill: #777777;
-  }
-  text.label{
-    font-weight: 600;
-  }
+text.subTitle{
+	font-size: 18px;
+	font-weight: 500;
+	fill: #272626;
+}
+text.caption{
+	font-weight: 400;
+	font-size: 14px;
+	fill: #777777;
+}
+text.label{
+	font-weight: 600;
+}
 
-  text.valueLabel{
-    font-weight: 300;
-  }
+text.valueLabel{
+	font-weight: 300;
+}
 
-  text.weekText{
-    font-size: 64px;
-    font-weight: 700;
-    opacity: 0.25;
-  }
-  .tick text {
-    fill: #777777;
-  }
-  .xAxis .tick:nth-child(2) text {
-    text-anchor: start;
-  }
-  .tick line {
-    shape-rendering: CrispEdges;
-    stroke: #dddddd;
-  }
-  .tick line.origin{
-    stroke: #aaaaaa;
-  }
-  path.domain{
-    display: none;
-  }
-
+text.weekText{
+	font-size: 64px;
+	font-weight: 700;
+	opacity: 0.25;
+}
+.tick text {
+	fill: #777777;
+}
+.xAxis .tick:nth-child(2) text {
+	text-anchor: start;
+}
+.tick line {
+	shape-rendering: CrispEdges;
+	stroke: #dddddd;
+}
+.tick line.origin{
+	stroke: #aaaaaa;
+}
+path.domain{
+	display: none;
+}
 
 /* -----------------------------------------------------------------------------
 
