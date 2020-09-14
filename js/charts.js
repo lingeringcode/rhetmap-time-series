@@ -84,7 +84,13 @@ function writePriorPostings(raw) {
       // Loop thru full list and match job_year and previous week
       raw.forEach(function(row){
         if ( (row["job_year"] == r["job_year"]) && (row["week"] == (r["week"]-1))) {
-          r["last_posting_total"] = row["posting_total"];
+          if (row["posting_total"] != 0) {
+            r["last_posting_total"] = row["posting_total"];
+          }
+          // if no postings, then append previous weeks total
+          else if (row["posting_total"] == 0) {
+            r["last_posting_total"] = row["last_posting_total"];
+          }
         }
       });
     }
@@ -115,6 +121,7 @@ function writeRanks(lwd) {
   lwd.forEach(function(l){
     for (const [key, value] of Object.entries(l)) {
       let w;
+
       if (key == "week") {
         w = value;
         if (w == 1){
@@ -268,6 +275,15 @@ function formatBarData(data) {
           list_week_dicts.push(entry)
         }
       }
+      else if (index == 15) {
+        let jy9 = "2020-2021";
+        if ( !Number.isNaN(Number(value.$t)) > 0) {
+          let pt9 = Number(value.$t);
+          let entry = { week:wk, job_year:jy9, posting_total:pt9};
+          list_week_dicts.push(entry)
+        }
+      }
+
       index++
     }
   }
@@ -290,6 +306,7 @@ function formatData(data) {
   var yr1718wks = [];
   var yr1819wks = [];
   var yr1920wks = [];
+  var yr2021wks = [];
 
   // Instantiate dictionaries/object arrays for year data
   var yr1213 = {};
@@ -300,6 +317,7 @@ function formatData(data) {
   var yr1718 = {};
   var yr1819 = {};
   var yr1920 = {};
+  var yr2021 = {};
 
   // Get length of JSON object
   var length = 0;
@@ -317,16 +335,17 @@ function formatData(data) {
       yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
       yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
       yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
+      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
       /*
         For the new market year, check if cell's empty.
         If empty, type as NaN (Not A Number). If value
         exists, push the value to the array.
       */
-      if (data.feed.entry[i].gsx$rctbw_7.$t === "") {
-        yr1920wks.push(Number.NaN);
+      if (data.feed.entry[i].gsx$rctbw_8.$t === "") {
+        yr2021wks.push(Number.NaN);
       }
       else {
-        yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
+        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t);
       }
     }
     // After first series of array entries, write the rest.
@@ -339,16 +358,17 @@ function formatData(data) {
       yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
       yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
       yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
+      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
       /*
         For the new market year, check if cell's empty.
         If empty, type as NaN (Not A Number). If value
         exists, push the value to the array.
       */
-      if (data.feed.entry[i].gsx$rctbw_7.$t === "") {
-        yr1920wks.push(Number.NaN);
+      if (data.feed.entry[i].gsx$rctbw_8.$t === "") {
+        yr2021wks.push(Number.NaN);
       }
       else {
-        yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
+        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t);
       }
     }
     console.log("Writing out the 17 weeks for each year.");
@@ -398,6 +418,10 @@ function formatData(data) {
       yr:"2019 - 2020",
       wks:yr1920wks
     };
+    yr2021 = {
+      yr:"2020 - 2021",
+      wks:yr2021wks
+    };
     console.log("After writeYears is complete, here\'s an example object array that binds the year string label with the array list of the weekly posting data, yr1213:\n");
     console.log(yr1213);
     writeMarketData();
@@ -408,7 +432,7 @@ function formatData(data) {
     // Define explicit data-types for per Year data
     var yrData = [];
     var fullYearData = [];
-    fullYearData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819,yr1920);
+    fullYearData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819,yr1920,yr2021);
     yrData = fullYearData;
     console.log("writeMarketData() combines all of the yearly object arrays into one complete object array, yrData:\n");
     console.log(yrData);
@@ -446,6 +470,11 @@ let title = svg.append('text')
   .attr('y', 24)
   .html('\"Racing\" bar chart: Comparing each year\'s job postings per week until week 17/January 1');
 
+let currentYear = svg.append('text')
+  .attr('class', 'currentYear')
+  .attr('y', 50)
+  .html('Current year only includes values up until the available weekly <a href="http://rhetmap.org/market-comparison/">rhetmap data</a>');
+
 let caption = svg.append('text')
   .attr('class', 'caption')
   .attr('x', width)
@@ -472,7 +501,11 @@ function paintBarViz(data) {
     });
   
     let x = d3.scaleLinear()
-      .domain([0, d3.max(weekSlice, d => d.posting_total)])
+      .domain([0, d3.max(weekSlice, function(d) {
+          if (d.posting_total > 0) { return d.posting_total }
+          else if (d.posting_total == 0) { return 0 }
+        })]
+      )
       .range([margin.left, width-margin.right-65]);
 
     let y = d3.scaleLinear()
@@ -492,13 +525,18 @@ function paintBarViz(data) {
       .selectAll('.tick line')
       .classed('origin', d => d == 0);
 
+    //Initial bar declaration
     svg.selectAll('rect.bar')
       .data(weekSlice, d => d.job_year)
       .enter()
       .append('rect')
       .attr('class', 'bar')
-      .attr('x', x(0)+1)
-      .attr('width', d => x(d.posting_total)-x(0)-1)
+      .attr('x', x(0)+1) //Initial x decl
+      .attr('width', function(d){
+        let increment = x(d.posting_total)-x(0)-1;
+        if (increment > 0) { return increment }
+        else if (increment <= 0) { return 0 }
+      })
       .attr('y', d => y(d.rank)+5)
       .attr('height', y(1)-y(0)-barPadding)
       .style('fill', d => d.colour);
@@ -555,7 +593,14 @@ function paintBarViz(data) {
         .append('rect')
         .attr('class', d => `bar ${d.job_year.replace(/\s/g,'_')}`)
         .attr('x', x(0)+1)
-        .attr( 'width', d => x(d.posting_total)-x(0)-1)
+        .attr( 'width', function(d) {
+          if (d.posting_total != 0) {
+            return x(d.posting_total)-x(0)-1
+          }
+          else if (d.posting_total == 0) {
+            return x(d.last_posting_total)-x(0)
+          }
+        })
         .attr('y', d => y(top_n+1)+5)
         .attr('height', y(1)-y(0)-barPadding)
         .style('fill', d => d.colour)
@@ -568,7 +613,14 @@ function paintBarViz(data) {
         .transition()
           .duration(tickDuration)
           .ease(d3.easeLinear)
-          .attr('width', d => x(d.posting_total)-x(0)-1)
+          .attr('width', function(d) { 
+            if (d.posting_total != 0) {
+              return x(d.posting_total)-x(0)-1
+            }
+            else if (d.posting_total == 0) {
+              return x(d.last_posting_total)-x(0)
+            }
+          })
           .attr('y', d => y(d.rank)+5);
           
       bars
@@ -586,7 +638,14 @@ function paintBarViz(data) {
         .enter()
         .append('text')
         .attr('class', 'label')
-        .attr('x', d => x(d.posting_total)-8)
+        .attr('x', function(d) {
+          if (d.posting_total != 0){
+            return x(d.posting_total)-8
+          }
+          if (d.posting_total == 0){
+            return x(d.posting_total)
+          }
+        })
         .attr('y', d => y(top_n+1)+5+((y(1)-y(0))/2))
         .style('text-anchor', 'end') 
         .html(d => d.job_year)    
@@ -600,7 +659,14 @@ function paintBarViz(data) {
         .transition()
         .duration(tickDuration)
           .ease(d3.easeLinear)
-          .attr('x', d => x(d.posting_total)-8)
+          .attr('x', function(d) {
+            if (d.posting_total != 0){
+              return x(d.posting_total)-8
+            }
+            if (d.posting_total == 0){
+              return x(d.posting_total)
+            }
+          })
           .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1);
     
       labels
@@ -608,7 +674,14 @@ function paintBarViz(data) {
         .transition()
           .duration(tickDuration)
           .ease(d3.easeLinear)
-          .attr('x', d => x(d.posting_total)-8)
+          .attr('x', function(d) {
+            if (d.posting_total != 0){
+              return x(d.posting_total)-8
+            }
+            if (d.posting_total == 0){
+              return x(d.posting_total)
+            }
+          })
           .attr('y', d => y(top_n+1)+5)
           .remove();
             
@@ -618,9 +691,16 @@ function paintBarViz(data) {
         .enter()
         .append('text')
         .attr('class', 'valueLabel')
-        .attr('x', d => x(d.posting_total)+5)
+        .attr('x', function(d) {
+          if (d.posting_total != 0){
+            return x(d.posting_total)-5
+          }
+          if (d.posting_total == 0){
+            return x(d.posting_total)
+          }
+        })
         .attr('y', d => y(top_n+1)+5)
-        .text(d => "d.last_posting_total")
+        .text(d => Number(d.last_posting_total))
         .transition()
           .duration(tickDuration)
           .ease(d3.easeLinear)
@@ -633,11 +713,20 @@ function paintBarViz(data) {
           .attr('x', d => x(d.posting_total)+5)
           .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
           .tween("text", function(d) {
-            if (!isNaN(d.last_posting_total)) {
-              let i = d3.interpolateRound(d.last_posting_total, d.posting_total);
-              return function(t) {
-                this.textContent = d3.format(',')(i(t));
-              };
+            if (!isNaN(d.last_posting_total) && (d.posting_total != 0)
+              && (d.last_posting_total != 0)) {
+                let i = d3.interpolateRound(d.last_posting_total, d.posting_total);
+                return function(t) {
+                  this.textContent = d3.format(',')(i(t));
+                };
+            }
+            else if (!isNaN(d.last_posting_total) && (d.posting_total == 0)
+              && (d.last_posting_total == 0)) {
+              let i = d3.interpolateRound((d.last_posting_total+d.last_posting_total), d.posting_total);
+              // return function(t) {
+              //   this.textContent = d3.format(',')(i(t));
+              // };
+              return t
             }
           });
     
@@ -646,7 +735,14 @@ function paintBarViz(data) {
       .transition()
         .duration(tickDuration)
         .ease(d3.easeLinear)
-        .attr('x', d => x(d.posting_total)+5)
+        .attr('x', function(d) {
+          if (d.posting_total != 0){
+            return x(d.posting_total)-8
+          }
+          if (d.posting_total == 0){
+            return x(d.posting_total)
+          }
+        })
         .attr('y', d => y(top_n+1)+5)
         .remove();
   

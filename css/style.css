@@ -153,6 +153,11 @@ text.caption{
 	font-size: 14px;
 	fill: #777777;
 }
+text.currentYear{
+	font-weight: 400;
+	font-size: 16px;
+	fill: #0f0f0f;
+}
 text.label{
 	font-weight: 600;
 }
