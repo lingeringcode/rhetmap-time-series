@@ -895,8 +895,8 @@ function paintDataViz(data) {
   ]);
 
   y.domain([
-    d3.min(marketYears, function(c) { return 20; }),
-    d3.max(marketYears, function(c) { return d3.max(c.values, function(d) { return parseInt(d.postings); }); })
+    d3.min(marketYears, function(c) { return 0; }),
+    d3.max(marketYears, function(c) { return d3.max(c.values, function(d) { return parseInt(d.postings)+20; }); })
   ]);
 
   z.domain(marketYears.map(function(c) { return c.id; }));
@@ -940,8 +940,9 @@ function paintDataViz(data) {
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x))
     .append("text")
-      .attr("y", 6)
-      .attr("dy", "1.5em")
+      .attr("y", 15)
+      .attr("x", 15)
+      .attr("dy", "2.5em")
       .attr("fill", "#000")
       .text("Weeks");
 
@@ -951,7 +952,7 @@ function paintDataViz(data) {
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0)
-      .attr("dy", "1.5em")
+      .attr("dy", "2.5em")
       .attr("fill", "#000")
       .text("Postings");
 
