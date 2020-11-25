@@ -3,7 +3,7 @@
 body{
 	font-family: 'Lato', Arial, serif;
 	font-weight: 300;
-	font-size: 14px;
+	font-size: 18px;
 	color: #000;
 	-webkit-font-smoothing: antialiased;
 }
@@ -77,9 +77,8 @@ a:hover {
 
 #chart-container h2 {
 	color: #444;
-	margin: 0 0 10px;
-	font-weight: 300;
-	padding: 10px;
+	font-weight: 700;
+	padding: 20px 0px;
 	text-shadow: 0 1px 1px rgba(255,255,255,0.8);
 	font-size: 24px;
 }
@@ -219,6 +218,10 @@ table td[class*="span"],table th[class*="span"],.row-fluid table td[class*="span
 ul.tables{margin-left: 3px;list-style-type: none;}
 ul.tables > li {margin-bottom: 20px;}
 
+/* JOB WiKI */
+#job-wiki figure img {
+	width: 100%
+}
 
 footer {
 	background-color: rgba(182, 153, 209, 0.25);

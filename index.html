@@ -36,7 +36,7 @@
             <svg id="line-chart" width="1080" height="500"></svg>
           </div>
 
-          <div id="citations">
+          <section id="citations">
             <h3>
               Citations
             </h3>
@@ -48,9 +48,9 @@
               <li>
                 See the code and references within the code in the repository hosted on Github: <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">https://github.com/lingeringcode/rhetmap-time-series</a>.
             </ul>
-          </div>
+          </section>
 
-          <div id="computed-values">
+          <section id="computed-values">
             <h3>
               Totals for each season by July 1st:
             </h3>
@@ -235,16 +235,56 @@
               </tbody>
             </table>
 
-          </div>
-          <div id="limitations">
+          </section>
+
+          <section id="limitations">
             <h3>Limitations of the "Market Comparison" Data</h2>
             <p>
               The following is an excerpt from Ridolfo &amp; Lindgren (2019), where Ridolfo notes the limitations of the "Market Comparison" data set:
             </p>
             <blockquote>
-              The rhetmap data originally mirrored the MLA JIL’s Composition & Rhetoric (C/R) listings (2012-2013), then both the C/R and Technical and Business Writing (TBW) listings (2013-2014). It did not begin as a long-term data collection project. In 2014-2015, rhetmap began accepting listings for a donation to a field fund that are not on the MLA JIL. By 2018-2019, direct listings on rhetmap.org now make up approximately 11% of advertisements.. There are thus a few specific limitations to the evolving dataset over time. First, different silos are measured (with some overlap) on the MLA JIL between 2012-2014. While some 2012-2013 TBW jobs are cross-listed in the CR category, not all were. As rhetmap.org began to accept job advertisement submissions in 2014-2015, the project no longer became a direct mirror of the MLA JIL. That said, neither the combined MLA JIL or rhetmap listings are a complete snapshot of the total market. While rhetmap.org maintains a low barrier to job submissions (a small field donation to a fund on the honor system), some jobs will only be listed on sites such as InsideHigherEd, Chronicle, local HR websites, or field listservs. The comparative usefulness of the data, long-rterm, should be viewed with those concerns in mind.
+              The rhetmap data originally mirrored the MLA JIL’s Composition & Rhetoric (C/R) listings (2012-2013), then both the C/R and Technical and Business Writing (TBW) listings (2013-2014). It did not begin as a long-term data collection project. In 2014-2015, rhetmap began accepting listings for a donation to a field fund that are not on the MLA JIL. By 2018-2019, direct listings on rhetmap.org now make up approximately 11% of advertisements.. There are thus a few specific limitations to the evolving dataset over time. First, different silos are measured (with some overlap) on the MLA JIL between 2012-2014. While some 2012-2013 TBW jobs are cross-listed in the CR category, not all were. As rhetmap.org began to accept job advertisement submissions in 2014-2015, the project no longer became a direct mirror of the MLA JIL. That said, neither the combined MLA JIL or rhetmap listings are a complete snapshot of the total market. While rhetmap.org maintains a low barrier to job submissions (a small field donation to a fund on the honor system), some jobs will only be listed on sites such as InsideHigherEd, Chronicle, local HR websites, or field listservs. The comparative usefulness of the data, long-term, should be viewed with those concerns in mind.
             </blockquote>
-          </div>
+          </section>
+
+          <!-- START JOB WIKI -->
+          <section id="job-wiki">
+            <h2>Academic Job Wiki Findings</h2>
+            <p>
+              The below charts were generated from scraped data from the 2011-2020 Rhetorican &amp; Composition Academic Job Wiki pages (src_code: modified from Ryan Heuser's <a href="https://github.com/quadrismegistus/jobcensus" target="_blank" rel="noopenner">jobcensus</a>). <strong>Note</strong>: Please remember that the latest job year will only reflect the total since it was last scraped.
+            </p>
+
+            <h3>2011-2020: Rhetoric &amp; Composition Jobs Overall</h3>
+            <figure id="job-wiki-overall">
+              <img src="images/rc-jobs-overall.svg" alt="Chart that conveys an overall decline in the number of all academic positions between 2011 and the current market year." />
+              <figcaption>
+                <p>
+                  Chart that conveys an overall decline in the number of all academic positions between 2011 and the current market year
+                </p>
+              </figcaption>
+            </figure>
+
+            <h3>2011-2020: Rhetoric &amp; Composition Jobs by Type</h3>
+            <figure id="job-wiki-overall">
+              <img src="images/rc-job-type.svg" alt="Chart that conveys the number of academic positions categorized by its type between 2011 and the current market year. For example, tenure-track, non tenure-track, postdoc, and unknown positions." />
+              <figcaption>
+                <p>
+                  Chart that conveys the number of academic positions categorized by its type between 2011 and the current market year: Tenure-track, non tenure-track, postdoc, and unknown positions.
+                </p>
+              </figcaption>
+            </figure>
+          </section>
+
+          <h3>2011-2020: Rhetoric &amp; Composition Jobs by Field</h3>
+            <figure id="job-wiki-overall">
+              <img src="images/rc-field-alias.svg" alt="Chart that conveys the number of academic positions categorized by their field of study between 2011 and the current market year: rhetoric and composition, generalist, community college, etc." />
+              <figcaption>
+                <p>
+                  Chart that conveys the number of academic positions categorized by their field of study between 2011 and the current market year: rhetoric and composition, generalist, community college, etc.
+                </p>
+              </figcaption>
+            </figure>
+          </section>
 
           <footer id="resources">
               <h3>Tutorial Resources</h3>
