@@ -38,16 +38,23 @@ a:hover {
 	height: 0;
 	margin: 0;
 }
-.main {
+/* main {
 	width: 100%;
 	margin: 0 auto;
 	position: relative;
+} */
+main {
+	width: 1200px;
+  margin: 0 auto 50px auto;
+  background: rgba(255,255,255,0.5);
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  padding: 20px 30px;
 }
 .container > header {
 	margin: 10px;
 	padding: 20px 10px 10px 10px;
 }
-.container > header h1{
+.container > header h1 {
 	text-align: center;
 	font-size: 30px;
 	line-height: 32px;
@@ -63,19 +70,13 @@ a:hover {
 	text-align: left;
 	margin: 0 auto;
 	padding: 15px 0 5px 0;
-	/* color: #000; */
 }
 
-#chart-container {
-	width: 1200px;
-	margin: 0 auto 50px auto;
-	background: rgba(255,255,255,0.5);
-	box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-	padding: 20px 30px;
+article > section {
+	padding: 1em;
 }
 
 #chart-container h2 {
-	color: #444;
 	font-weight: 700;
 	padding: 20px 0px;
 	text-shadow: 0 1px 1px rgba(255,255,255,0.8);
@@ -133,10 +134,10 @@ g.context rect.background{
 }​
 
 /* BAR CHART */
-div#bar-chart {
+#bar-chart {
 	margin-bottom: 50px;
 }
-div#chart-container div p {
+#chart-container div p {
 	margin: 10px;
 }
 

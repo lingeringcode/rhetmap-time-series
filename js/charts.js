@@ -464,16 +464,6 @@ const margin = {
 };
 
 let barPadding = (height-(margin.bottom+margin.top))/(top_n*5);
-  
-let title = svg.append('text')
-  .attr('class', 'title')
-  .attr('y', 24)
-  .html('\"Racing\" bar chart: Comparing each year\'s job postings per week until week 17/January 1');
-
-let currentYear = svg.append('text')
-  .attr('class', 'currentYear')
-  .attr('y', 50)
-  .html('Current year only includes values up until the available weekly <a href="http://rhetmap.org/market-comparison/">rhetmap data</a>');
 
 let caption = svg.append('text')
   .attr('class', 'caption')

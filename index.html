@@ -39,235 +39,244 @@
           </nav>
         </div>
       </header>
-      <section class="main">
-
-        <div id="chart-container">
-          <div id="bar-chart"></div>
-          <div>
-            <h2>Annotated multi-line chart: Comparing each year's job postings per week until week 17/January 1</h2>
+      <main>
+        
+        <article id="chart-container">
+          <h2>Rhetmap.org: Tracking Weeks 1-17</h2>
+          <section id="racing-bar-chart">
+            <h3>"Racing" bar chart: Comparing each year's job postings per week until week 17/January 1</h3>
+            <p>
+              Current year only includes values up until the available weekly <a href="http://rhetmap.org/market-comparison/">rhetmap data</a>.
+            </p>
+            <div id="bar-chart"></div>
+          </section>
+          
+          <section id="annotated-multiline-chart">
+            <h3>Annotated multi-line chart: Comparing each year's job postings per week until week 17/January 1</h3>
             <p>
               To compare the yearly data per week, either hover your mouse over the chart below, or click and drag your mouse within the chart's area.
             </p>
             <svg id="line-chart" width="1080" height="500"></svg>
-          </div>
 
-          <section id="citations">
-            <h3>
-              Citations
-            </h3>
-            <ul>
-              <li>
-                Data visualization created by <a href="https://clndgrn.com/" target="_blank" rel="noopener">Chris Lindgren</a>.
-              <li>
-                Data from Jim Ridolfo's "RhetMap - Market Comparison" spreadsheet: <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">http://rhetmap.org/market-comparison/</a>.
-              <li>
-                See the code and references within the code in the repository hosted on Github: <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">https://github.com/lingeringcode/rhetmap-time-series</a>.
-            </ul>
+            <div id="citations">
+              <h3>
+                Citations
+              </h3>
+              <ul>
+                <li>
+                  Data visualization created by <a href="https://clndgrn.com/" target="_blank" rel="noopener">Chris Lindgren</a>.
+                <li>
+                  Data from Jim Ridolfo's "RhetMap - Market Comparison" spreadsheet: <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">http://rhetmap.org/market-comparison/</a>.
+                <li>
+                  See the code and references within the code in the repository hosted on Github: <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">https://github.com/lingeringcode/rhetmap-time-series</a>.
+              </ul>
+            </div>
+
+            <div id="computed-values">
+              <h3>
+                Totals for each season by July 1st:
+              </h3>
+
+              <table class="table striped">
+                <thead>
+                  <tr>
+                    <th class="fifteen">
+                      Season Year
+                    </th>
+                    <th class="fifteen">
+                      Total Posts
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr>
+                    <td class="fifteen">
+                      2012-2013
+                    </td>
+                    <td class="fifteen">
+                      278
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2013-2014
+                    </td>
+                    <td class="fifteen">
+                      318
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2014-2015
+                    </td>
+                    <td class="fifteen">
+                      325
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2015-2016
+                    </td>
+                    <td class="fifteen">
+                      273
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2016-2017
+                    </td>
+                    <td class="fifteen">
+                      243
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2017-2018
+                    </td>
+                    <td class="fifteen">
+                      280
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2018-2019
+                    </td>
+                    <td class="fifteen">
+                      220
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2019-2020
+                    </td>
+                    <td class="fifteen">
+                      n/a
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+
+              <h3>
+                Percentage of season advertised by Jan 3rd:
+              </h3>
+
+              <table class="table striped">
+                <thead>
+                  <tr>
+                    <th class="fifteen">
+                      Season Year
+                    </th>
+                    <th class="fifteen">
+                      % Total Posts
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr>
+                    <td class="fifteen">
+                      2012-2013
+                    </td>
+                    <td class="fifteen">
+                      73.74%
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2013-2014
+                    </td>
+                    <td class="fifteen">
+                      73.58%
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2014-2015
+                    </td>
+                    <td class="fifteen">
+                      73.23%
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2015-2016
+                    </td>
+                    <td class="fifteen">
+                      73.62%
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2016-2017
+                    </td>
+                    <td class="fifteen">
+                      73.25%
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2017-2018
+                    </td>
+                    <td class="fifteen">
+                      70.71%
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2018-2019
+                    </td>
+                    <td class="fifteen">
+                      69.54%
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="fifteen">
+                      2019-2020
+                    </td>
+                    <td class="fifteen">
+                      n/a
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+
+            </div>
+
+            <div id="limitations">
+              <h3>Limitations of the "Market Comparison" Data</h2>
+              <p>
+                The following is an excerpt from Ridolfo &amp; Lindgren (2019), where Ridolfo notes the limitations of the "Market Comparison" data set:
+              </p>
+              <blockquote>
+                The rhetmap data originally mirrored the MLA JIL’s Composition & Rhetoric (C/R) listings (2012-2013), then both the C/R and Technical and Business Writing (TBW) listings (2013-2014). It did not begin as a long-term data collection project. In 2014-2015, rhetmap began accepting listings for a donation to a field fund that are not on the MLA JIL. By 2018-2019, direct listings on rhetmap.org now make up approximately 11% of advertisements.. There are thus a few specific limitations to the evolving dataset over time. First, different silos are measured (with some overlap) on the MLA JIL between 2012-2014. While some 2012-2013 TBW jobs are cross-listed in the CR category, not all were. As rhetmap.org began to accept job advertisement submissions in 2014-2015, the project no longer became a direct mirror of the MLA JIL. That said, neither the combined MLA JIL or rhetmap listings are a complete snapshot of the total market. While rhetmap.org maintains a low barrier to job submissions (a small field donation to a fund on the honor system), some jobs will only be listed on sites such as InsideHigherEd, Chronicle, local HR websites, or field listservs. The comparative usefulness of the data, long-term, should be viewed with those concerns in mind.
+              </blockquote>
+            </div>
           </section>
-
-          <section id="computed-values">
-            <h3>
-              Totals for each season by July 1st:
-            </h3>
-
-            <table class="table striped">
-              <thead>
-                <tr>
-                  <th class="fifteen">
-                    Season Year
-                  </th>
-                  <th class="fifteen">
-                    Total Posts
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-
-                <tr>
-                  <td class="fifteen">
-                    2012-2013
-                  </td>
-                  <td class="fifteen">
-                    278
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2013-2014
-                  </td>
-                  <td class="fifteen">
-                    318
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2014-2015
-                  </td>
-                  <td class="fifteen">
-                    325
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2015-2016
-                  </td>
-                  <td class="fifteen">
-                    273
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2016-2017
-                  </td>
-                  <td class="fifteen">
-                    243
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2017-2018
-                  </td>
-                  <td class="fifteen">
-                    280
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2018-2019
-                  </td>
-                  <td class="fifteen">
-                    220
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2019-2020
-                  </td>
-                  <td class="fifteen">
-                    n/a
-                  </td>
-                </tr>
-
-              </tbody>
-            </table>
-
-            <h3>
-              Percentage of season advertised by Jan 3rd:
-            </h3>
-
-            <table class="table striped">
-              <thead>
-                <tr>
-                  <th class="fifteen">
-                    Season Year
-                  </th>
-                  <th class="fifteen">
-                    % Total Posts
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-
-                <tr>
-                  <td class="fifteen">
-                    2012-2013
-                  </td>
-                  <td class="fifteen">
-                    73.74%
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2013-2014
-                  </td>
-                  <td class="fifteen">
-                    73.58%
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2014-2015
-                  </td>
-                  <td class="fifteen">
-                    73.23%
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2015-2016
-                  </td>
-                  <td class="fifteen">
-                    73.62%
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2016-2017
-                  </td>
-                  <td class="fifteen">
-                    73.25%
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2017-2018
-                  </td>
-                  <td class="fifteen">
-                    70.71%
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2018-2019
-                  </td>
-                  <td class="fifteen">
-                    69.54%
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="fifteen">
-                    2019-2020
-                  </td>
-                  <td class="fifteen">
-                    n/a
-                  </td>
-                </tr>
-
-              </tbody>
-            </table>
-
-          </section>
-
-          <section id="limitations">
-            <h3>Limitations of the "Market Comparison" Data</h2>
-            <p>
-              The following is an excerpt from Ridolfo &amp; Lindgren (2019), where Ridolfo notes the limitations of the "Market Comparison" data set:
-            </p>
-            <blockquote>
-              The rhetmap data originally mirrored the MLA JIL’s Composition & Rhetoric (C/R) listings (2012-2013), then both the C/R and Technical and Business Writing (TBW) listings (2013-2014). It did not begin as a long-term data collection project. In 2014-2015, rhetmap began accepting listings for a donation to a field fund that are not on the MLA JIL. By 2018-2019, direct listings on rhetmap.org now make up approximately 11% of advertisements.. There are thus a few specific limitations to the evolving dataset over time. First, different silos are measured (with some overlap) on the MLA JIL between 2012-2014. While some 2012-2013 TBW jobs are cross-listed in the CR category, not all were. As rhetmap.org began to accept job advertisement submissions in 2014-2015, the project no longer became a direct mirror of the MLA JIL. That said, neither the combined MLA JIL or rhetmap listings are a complete snapshot of the total market. While rhetmap.org maintains a low barrier to job submissions (a small field donation to a fund on the honor system), some jobs will only be listed on sites such as InsideHigherEd, Chronicle, local HR websites, or field listservs. The comparative usefulness of the data, long-term, should be viewed with those concerns in mind.
-            </blockquote>
-          </section>
-
-          <!-- START JOB WIKI -->
-          <section id="job-wiki">
+        </article>
+        
+        <article id="job-wiki">
+          <section>
             <h2>(Informal) Rhetoric &amp; Composition Job Census</h2>
 
             <p>
-              Beyond the initial 17 weeks, how many jobs are offered each year in Rhetoric and Composition? This "census" is meant to be an informal count of the jobs advertised each year by using the <a href="https://academicjobs.wikia.org/" rel="nofollow">Academic Jobs Wiki</a> as its primary source.
+              <strong>Beyond the initial 17 weeks tracked by rhetmap.org, how many jobs are offered each year in Rhetoric and Composition?</strong> <br /><br />This informal census counts the jobs advertised each year by using the <a href="https://academicjobs.wikia.org/" rel="nofollow">Academic Jobs Wiki</a> as its source.
             </p>
 
             <p>
@@ -296,9 +305,8 @@
                 </p>
               </figcaption>
             </figure>
-          </section>
-
-          <h3>2011-2020: Rhetoric &amp; Composition Jobs by Field</h3>
+            
+            <h3>2011-2020: Rhetoric &amp; Composition Jobs by Field</h3>
             <figure id="job-wiki-overall">
               <img src="images/rc-field-alias.svg" alt="Chart that conveys the number of academic positions categorized by their field of study between 2011 and the current market year: rhetoric and composition, generalist, community college, etc." />
               <figcaption>
@@ -308,82 +316,83 @@
               </figcaption>
             </figure>
           </section>
+        </article>
+        
+        <footer id="resources">
+            <h3>Tutorial Resources</h3>
+            <ul>
+              <li>
+                <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">
+                  Ridolfo's RhetMap's "Market Comparison" Page</a>
+              </li>
+              <li>
+                <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">
+                  Lindgren's Github Repository for this page</a>
+              </li>
+              <li>
+                <a href="http://bl.ocks.org/asielen/44ffca2877d0132572cb" target="_blank" rel="noopener">
+                  Example MultiLine Chart</a>
+              </li>
+              <li>
+                <a href="https://charts.animateddata.co.uk/datavistree/" target="_blank" rel="noopener">
+                  Example Hierarchical (Tree) Chart</a>
+              </li>
+              <li>
+                <a href="https://www.visualcinnamon.com/2015/08/stretched-chord" target="_blank" rel="noopener">
+                  Example Relational (Stretched Chord) Chart</a>
+              </li>
+              <li>
+                <a href="https://github.com/d3/d3/wiki/Gallery" target="_blank" rel="noopener">
+                  D3.js Gallery</a>
+              </li>
+              <li>
+                <a href="https://jsonformatter.org/json-pretty-print" target="_blank" rel="noopener">
+                  JSON Formatter</a>
+              </li>
+            </ul>
 
-          <footer id="resources">
-              <h3>Tutorial Resources</h3>
-              <ul>
-                <li>
-                  <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">
-                    Ridolfo's RhetMap's "Market Comparison" Page</a>
-                </li>
-                <li>
-                  <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">
-                    Lindgren's Github Repository for this page</a>
-                </li>
-                <li>
-                  <a href="http://bl.ocks.org/asielen/44ffca2877d0132572cb" target="_blank" rel="noopener">
-                    Example MultiLine Chart</a>
-                </li>
-                <li>
-                  <a href="https://charts.animateddata.co.uk/datavistree/" target="_blank" rel="noopener">
-                    Example Hierarchical (Tree) Chart</a>
-                </li>
-                <li>
-                  <a href="https://www.visualcinnamon.com/2015/08/stretched-chord" target="_blank" rel="noopener">
-                    Example Relational (Stretched Chord) Chart</a>
-                </li>
-                <li>
-                  <a href="https://github.com/d3/d3/wiki/Gallery" target="_blank" rel="noopener">
-                    D3.js Gallery</a>
-                </li>
-                <li>
-                  <a href="https://jsonformatter.org/json-pretty-print" target="_blank" rel="noopener">
-                    JSON Formatter</a>
-                </li>
-              </ul>
+            <h3>Visualization Resources</h3>
+            <ul>
+              <li>
+                <a href="https://www.visualcinnamon.com/blog/archive" target="_blank" rel="noopener">
+                  Bremer, Nadieh. (2019). Visual Cinnamon [professional blog].</a>
+              </li>
+              <li>
+                <a href="http://www.visualisingdata.com/book/" target="_blank" rel="noopener">
+                  Kirk, Andy. (2016). Data visualisation: A handbook for data driven design</a>
+              </li>
+              <li>
+                <a href="http://learnjsdata.com/" target="_blank" rel="noopener">
+                  Learn JS Data: Data cleaning, manipulation, and wrangling in JavaScript</a>
+              </li>
+            </ul>
 
-              <h3>Visualization Resources</h3>
-              <ul>
-                <li>
-                  <a href="https://www.visualcinnamon.com/blog/archive" target="_blank" rel="noopener">
-                    Bremer, Nadieh. (2019). Visual Cinnamon [professional blog].</a>
-                </li>
-                <li>
-                  <a href="http://www.visualisingdata.com/book/" target="_blank" rel="noopener">
-                    Kirk, Andy. (2016). Data visualisation: A handbook for data driven design</a>
-                </li>
-                <li>
-                  <a href="http://learnjsdata.com/" target="_blank" rel="noopener">
-                    Learn JS Data: Data cleaning, manipulation, and wrangling in JavaScript</a>
-                </li>
-              </ul>
-
-              <h3>Additional Resources</h3>
-              <ul>
-                <li>
-                  <a href="writing-with-data.html" target="_blank" rel="noopener">
-                    Another "Missing" Resource: Writing with data</a>
-                </li>
-                <li>
-                  <a href="data-changes.html" target="_blank" rel="noopener">
-                    Another "Missing" Resource: From data feed to data viz</a>
-                </li>
-                <li>
-                  <a href="https://github.com/lingeringcode/rhetmap-heatmap" target="_blank" rel="noopener">
-                    Lindgren's HeatMap of the Market Comparison data</a>
-                </li>
-                <li>
-                  <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics" target="_blank" rel="noopener">
-                    Mozilla Developer Network: JavaScript Basics</a>
-                </li>
-                <li>
-                  <a href="https://observablehq.com" target="_blank" rel="noopener">
-                    Observable: D3.js Online Notebooks</a>
-                </li>
-              </ul>
-          </footer>
-        </div>
-      </section>
+            <h3>Additional Resources</h3>
+            <ul>
+              <li>
+                <a href="writing-with-data.html" target="_blank" rel="noopener">
+                  Another "Missing" Resource: Writing with data</a>
+              </li>
+              <li>
+                <a href="data-changes.html" target="_blank" rel="noopener">
+                  Another "Missing" Resource: From data feed to data viz</a>
+              </li>
+              <li>
+                <a href="https://github.com/lingeringcode/rhetmap-heatmap" target="_blank" rel="noopener">
+                  Lindgren's HeatMap of the Market Comparison data</a>
+              </li>
+              <li>
+                <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics" target="_blank" rel="noopener">
+                  Mozilla Developer Network: JavaScript Basics</a>
+              </li>
+              <li>
+                <a href="https://observablehq.com" target="_blank" rel="noopener">
+                  Observable: D3.js Online Notebooks</a>
+              </li>
+            </ul>
+        </footer>
+        
+      </main>
     </div>
   </body>
   <script src="js/charts.js"></script>
