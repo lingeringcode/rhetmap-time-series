@@ -1,57 +1,84 @@
+let mcData,AVG_POSTS,EXISTING
+let postTracker = 0
+// Instantiate arrays for racing-bar week data
+let list_week_dicts = []
+let fullWeeklyData = []
+
 ////////////////////////////////////////////////////////////
 //////////// Get the Google sheet data /////////////////////
 ////////////////////////////////////////////////////////////
 
-getData();
-function getData() {
-  // ID of the Google Spreadsheet
-  var spreadsheetID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w";
+function getSSD(rurl) {
 
-  // Make sure it is public or set to Anyone with link can view
-  var rurl = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
+  /**
+   *  Define and instantiate a request object
+   *  for spreadsheet data
+   *  For more info, research "javascript http request objects"
+   */
+  let xhr = new XMLHttpRequest()
 
-  /*
-  * Spreadsheet data request
-  *  src: https://spreadsheets.google.com/feeds/list/1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w/od6/public/values?alt=json
-  *  For more info, research "javascript http request objects"
-  */
-  // Define/instantiate a request object
-  var request = new XMLHttpRequest();
+  /**
+   * Return a Promise object for asynchronous
+   * call for the data, i.e., don't do anything
+   * else until the data has been returned.
+   */
+  return new Promise((resolve, reject) => {
 
-  // Use request object to open the URL: rurl
-  request.open('GET', rurl, true);
+    xhr.onreadystatechange = (e) => {
+      if (xhr.readyState !== 4) {
+        return
+      }
 
-  // When it loads, format it.
-  request.onload = function() {
-    if (request.status >= 200 && request.status < 400) {
-      // Success! Got the data.
-      // Format request.responseText object as standard JSON
-      var data = JSON.parse(request.responseText);
-      console.log("Retrieved spreadsheet data.\n"
-                  +"Parsed it as a JSON object:\n");
-      console.log(data);
-      // Call formatData function with JSON data as an argument
-      formatBarData(data);
-      formatData(data);
-    } else {
-      // Another possible error
-      console.log("Target server reached, but it returned an error.");
+      if (xhr.status === 200) {
+        console.log("Retrieved spreadsheet data.\n"
+                  +"Parsed it as a JSON object:\n")
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        console.warn('request_error')
+      }
     }
-  };
 
-  // If an error occurs, tell us.
-  request.onerror = function() {
-    // Connection error
-    console.log("connection error");
-  };
-
-  /*
-  * I do not need to "send" anything back to the server,
-  * but this .send() method is still required,
-  * so I send a "null" value.
-  */
-  request.send(null);
+    xhr.open('GET', rurl)
+    xhr.send()
+  });
 }
+
+// ID of the Google Spreadsheet
+let marketComparisonID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w"
+let avgPercentageSheetID = "132y3k_FJj4Gnf8cU0NtDa0eNhf77SlwiNq5GRPL4MRM"
+
+/**
+ * Assign URLs Make sure it is public and
+ * set the sheet to 'Anyone with link can view'
+ */
+let mcURL = "https://spreadsheets.google.com/feeds/list/" 
+            + marketComparisonID
+            + "/od6/public/values?alt=json"
+let apURL = "https://spreadsheets.google.com/feeds/list/" 
+            + avgPercentageSheetID
+            + "/1/public/values?alt=json"
+
+/**
+ * Use Promises too retrieve the spreadsheet data
+ */
+// getSSD(mcURL).then(mcData => formatBarData(mcData))
+getSSD(mcURL).then(
+    data => {
+      let fwyd = formatBarData(data)
+      paintBarViz(fwyd)
+      formatMultiLineData(data)
+    }
+  )
+
+function isolateAverage(data) {
+  // Get length of JSON object
+  let length = 0
+  for(let k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++
+  // Assign average total percentages of posts after Jan. 1
+  AVG_POSTS = Number(data.feed.entry[length-1].gsx$postpercentagebywk17.$t)
+  paintPredictChart(AVG_POSTS)
+}
+
 
 ////////////////////////////////////////////////////////////
 //////////// Format the newly retrieved data ///////////////
@@ -62,7 +89,7 @@ function ranker(wk) {
     return parseFloat(b.posting_total) - parseFloat(a.posting_total);
   });
   let rank = 1;
-  for (var wi = 0; wi <= wk.length-1; wi++) {
+  for (let wi = 0; wi <= wk.length-1; wi++) {
     wk[wi]["rank"] = String(rank);
     listRankedWeeks.push(wk);
     rank++
@@ -182,26 +209,23 @@ function writeRanks(lwd) {
   // send to get ranked per week 
   let allWeeks = [w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15,w16,w17];
   rankedAllWeeks = [];
-  for (var aa = 0; aa <= allWeeks.length-1; aa++) {
-    for (var awi = 0; awi <= allWeeks[aa].length-1; awi++) {
+  for (let aa = 0; aa <= allWeeks.length-1; aa++) {
+    for (let awi = 0; awi <= allWeeks[aa].length-1; awi++) {
       rankedAllWeeks.push(allWeeks[aa][awi]);
     }
   }
   return rankedAllWeeks;
 }
 
-// Instantiate arrays for week data
-let list_week_dicts = [];
-let fullWeeklyData = [];
 function formatBarData(data) {
   let entries = data.feed.entry;
   
   // Get length of JSON object
-  var length = 0;
-  for(var k in entries) if(entries.hasOwnProperty(k)) length++;
+  let length = 0;
+  for(let k in entries) if(entries.hasOwnProperty(k)) length++;
 
   // Put week data in array sorted by week
-  for (var i = 0; i <= length - 1; i++) {
+  for (let i = 0; i <= length - 1; i++) {
     const weekObject = entries[i];
     let index = 0;
     let wk = 0;
@@ -287,101 +311,101 @@ function formatBarData(data) {
       index++
     }
   }
-  let rankedAllWeeks = writeRanks(list_week_dicts);
-  fullWeeklyData = writePriorPostings(rankedAllWeeks);
-  paintBarViz(fullWeeklyData);
+  let rankedAllWeeks = writeRanks(list_week_dicts)
+  fullWeeklyData = writePriorPostings(rankedAllWeeks)
+
+  return fullWeeklyData
 }
 
-function formatData(data) {
+function formatMultiLineData(data) {
   console.log("The requested spreadsheet data in the JSON format\n"
               +"has been passed as a parameter for the formatData function:\n");
   console.log(data);
-  var week;
   // Instantiate arrays for week data
-  var yr1213wks = [];
-  var yr1314wks = [];
-  var yr1415wks = [];
-  var yr1516wks = [];
-  var yr1617wks = [];
-  var yr1718wks = [];
-  var yr1819wks = [];
-  var yr1920wks = [];
-  var yr2021wks = [];
+  let yr1213wks = []
+  let yr1314wks = []
+  let yr1415wks = []
+  let yr1516wks = []
+  let yr1617wks = []
+  let yr1718wks = []
+  let yr1819wks = []
+  let yr1920wks = []
+  let yr2021wks = []
 
   // Instantiate dictionaries/object arrays for year data
-  var yr1213 = {};
-  var yr1314 = {};
-  var yr1415 = {};
-  var yr1516 = {};
-  var yr1617 = {};
-  var yr1718 = {};
-  var yr1819 = {};
-  var yr1920 = {};
-  var yr2021 = {};
+  let yr1213 = {}
+  let yr1314 = {}
+  let yr1415 = {}
+  let yr1516 = {}
+  let yr1617 = {}
+  let yr1718 = {}
+  let yr1819 = {}
+  let yr1920 = {}
+  let yr2021 = {}
 
   // Get length of JSON object
-  var length = 0;
-  for(var k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++;
+  let length = 0;
+  for(let k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++;
 
   // Put week data in array sorted by market years
-  for (var i = 0; i <= length - 1; i++) {
+  for (let i = 0; i <= length - 1; i++) {
     // Start the writing of the first entries.
     if (i === 0) {
-      week = data.feed.entry[i].gsx$_cn6ca.$t;
-      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
-      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
-      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
-      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
-      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
-      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
-      yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
-      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
+      week = data.feed.entry[i].gsx$_cn6ca.$t
+      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t)
+      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t)
+      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t)
+      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t)
+      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t)
+      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t)
+      yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t)
+      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t)
       /*
         For the new market year, check if cell's empty.
         If empty, type as NaN (Not A Number). If value
         exists, push the value to the array.
       */
       if (data.feed.entry[i].gsx$rctbw_8.$t === "") {
-        yr2021wks.push(Number.NaN);
+        yr2021wks.push(Number.NaN)
       }
       else {
-        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t);
+        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t)
       }
     }
     // After first series of array entries, write the rest.
     else {
-      week = data.feed.entry[i].gsx$_cn6ca.$t;
-      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t);
-      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t);
-      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t);
-      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t);
-      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t);
-      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t);
-      yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t);
-      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t);
+      week = data.feed.entry[i].gsx$_cn6ca.$t
+      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t)
+      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t)
+      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t)
+      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t)
+      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t)
+      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t)
+      yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t)
+      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t)
       /*
         For the new market year, check if cell's empty.
         If empty, type as NaN (Not A Number). If value
         exists, push the value to the array.
       */
       if (data.feed.entry[i].gsx$rctbw_8.$t === "") {
-        yr2021wks.push(Number.NaN);
+        yr2021wks.push(Number.NaN)
       }
       else {
-        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t);
+        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t)
       }
     }
-    console.log("Writing out the 17 weeks for each year.");
+    console.log("Writing out the 17 weeks for each year.")
   }
-  console.log("After the _for_ loop, here\'s an example array, yr1213wks:\n");
-  console.log(yr1213wks);
-  writeYears();
+  console.log("After the _for_ loop, here\'s an example array, yr1213wks:\n")
+  console.log(yr1213wks)
+  writeYears()
 
   /*
     Bind week arrays to market years.
     Note how I don't need to pass anything as an
     argument for writeYears(), since all of the
-    necessary variables have been declared within
+    necessary letiables have been declared within
     the scope of formatData(){...}.
   */
   function writeYears() {
@@ -430,50 +454,53 @@ function formatData(data) {
   // Join all object arrays as one array object
   function writeMarketData() {
     // Define explicit data-types for per Year data
-    var yrData = [];
-    var fullYearData = [];
-    fullYearData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819,yr1920,yr2021);
-    yrData = fullYearData;
-    console.log("writeMarketData() combines all of the yearly object arrays into one complete object array, yrData:\n");
-    console.log(yrData);
-    console.log("\nNow, the data are processed and ready to send as an argument to paintDataViz().");
-    paintDataViz(yrData);
+    let yrData = []
+    yrData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819,yr1920,yr2021)
+    console.log("writeMarketData() combines all of the yearly object arrays into one complete object array, yrData:\n")
+    console.log(yrData)
+    console.log("\nNow, the data are processed and ready to send as an argument to paintDataViz().")
+    paintDataViz(yrData)
+
+    EXISTING = yrData[yrData.length - 1].wks
+    // Now retrieve data for prediction chart
+    getSSD(apURL).then(apData => isolateAverage(apData))
   }
-};
+}
+
 
 ////////////////////////////////////////////////////////////
-//////////// Write and paint the chart /////////////////////
+//////////// Write and paint charts ////////////////////////
 ////////////////////////////////////////////////////////////
 
-// BAR CHART
-var svg = d3.select("#bar-chart").append("svg")
-  .attr("width", 960)
-  .attr("height", 600);
-
-var tickDuration = 2500;
-
-var top_n = 12;
-var height = 600;
-var width = 960;
-
-const margin = {
-  top: 80,
-  right: 0,
-  bottom: 5,
-  left: 0
-};
-
-let barPadding = (height-(margin.bottom+margin.top))/(top_n*5);
-
-let caption = svg.append('text')
-  .attr('class', 'caption')
-  .attr('x', width)
-  .attr('y', height-5)
-  .style('text-anchor', 'end')
-  .html('Source: <a href="http://rhetmap.org/market-comparison/">rhetmap.org</a>');
-
-let week = 1;
+// BAR CHART //
 function paintBarViz(data) {
+  let svg = d3.select("#bar-chart").append("svg")
+    .attr("width", 960)
+    .attr("height", 600)
+
+  let tickDuration = 2500
+
+  let top_n = 12
+  let height = 600
+  let width = 960
+
+  const margin = {
+    top: 80,
+    right: 0,
+    bottom: 5,
+    left: 0
+  };
+
+  let barPadding = (height-(margin.bottom+margin.top))/(top_n*5)
+
+  let caption = svg.append('text')
+    .attr('class', 'caption')
+    .attr('x', width)
+    .attr('y', height-5)
+    .style('text-anchor', 'end')
+    .html('Source: <a href="http://rhetmap.org/market-comparison/">rhetmap.org</a>')
+
+  let week = 1
     data.forEach(d => {
       d.posting_total = +d.posting_total,
       d.last_posting_total = +d.last_posting_total,
@@ -482,64 +509,64 @@ function paintBarViz(data) {
       d.colour = d3.hsl(Math.random()*360,0.75,0.75)
     });
   
-    let weekSlice = data.filter(d => d.week == week && !isNaN(d.posting_total))
-      .sort((a,b) => b.posting_total - a.posting_total)
-      .slice(0, top_n);
+  let weekSlice = data.filter(d => d.week == week && !isNaN(d.posting_total))
+    .sort((a,b) => b.posting_total - a.posting_total)
+    .slice(0, top_n);
 
-    weekSlice.forEach(function(d,i) { 
-      d.rank = i;
-    });
+  weekSlice.forEach(function(d,i) { 
+    d.rank = i;
+  });
+
+  let x = d3.scaleLinear()
+    .domain([0, d3.max(weekSlice, function(d) {
+        if (d.posting_total > 0) { return d.posting_total }
+        else if (d.posting_total == 0) { return 0 }
+      })]
+    )
+    .range([margin.left, width-margin.right-65]);
+
+  let y = d3.scaleLinear()
+    .domain([top_n, 0])
+    .range([height-margin.bottom, margin.top]);
+
+  let xAxis = d3.axisTop()
+    .scale(x)
+    .ticks(width > 500 ? 5:2)
+    .tickSize(-(height-margin.top-margin.bottom))
+    .tickFormat(d => d3.format(',')(d));
+
+  svg.append('g')
+    .attr('class', 'axis xAxis')
+    .attr('transform', `translate(0, ${margin.top})`)
+    .call(xAxis)
+    .selectAll('.tick line')
+    .classed('origin', d => d == 0);
+
+  //Initial bar declaration
+  svg.selectAll('rect.bar')
+    .data(weekSlice, d => d.job_year)
+    .enter()
+    .append('rect')
+    .attr('class', 'bar')
+    .attr('x', x(0)+1) //Initial x decl
+    .attr('width', function(d){
+      let increment = x(d.posting_total)-x(0)-1;
+      if (increment > 0) { return increment }
+      else if (increment <= 0) { return 0 }
+    })
+    .attr('y', d => y(d.rank)+5)
+    .attr('height', y(1)-y(0)-barPadding)
+    .style('fill', d => d.colour);
   
-    let x = d3.scaleLinear()
-      .domain([0, d3.max(weekSlice, function(d) {
-          if (d.posting_total > 0) { return d.posting_total }
-          else if (d.posting_total == 0) { return 0 }
-        })]
-      )
-      .range([margin.left, width-margin.right-65]);
-
-    let y = d3.scaleLinear()
-      .domain([top_n, 0])
-      .range([height-margin.bottom, margin.top]);
-
-    let xAxis = d3.axisTop()
-      .scale(x)
-      .ticks(width > 500 ? 5:2)
-      .tickSize(-(height-margin.top-margin.bottom))
-      .tickFormat(d => d3.format(',')(d));
-
-    svg.append('g')
-      .attr('class', 'axis xAxis')
-      .attr('transform', `translate(0, ${margin.top})`)
-      .call(xAxis)
-      .selectAll('.tick line')
-      .classed('origin', d => d == 0);
-
-    //Initial bar declaration
-    svg.selectAll('rect.bar')
-      .data(weekSlice, d => d.job_year)
-      .enter()
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', x(0)+1) //Initial x decl
-      .attr('width', function(d){
-        let increment = x(d.posting_total)-x(0)-1;
-        if (increment > 0) { return increment }
-        else if (increment <= 0) { return 0 }
-      })
-      .attr('y', d => y(d.rank)+5)
-      .attr('height', y(1)-y(0)-barPadding)
-      .style('fill', d => d.colour);
-    
-    svg.selectAll('text.label')
-      .data(weekSlice, d => d.job_year)
-      .enter()
-      .append('text')
-      .attr('class', 'label')
-      .attr('x', d => x(d.posting_total)-8) //changes x position of job_year label
-      .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
-      .style('text-anchor', 'end')
-      .html(d => d.job_year);
+  svg.selectAll('text.label')
+    .data(weekSlice, d => d.job_year)
+    .enter()
+    .append('text')
+    .attr('class', 'label')
+    .attr('x', d => x(d.posting_total)-8) //changes x position of job_year label
+    .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
+    .style('text-anchor', 'end')
+    .html(d => d.job_year);
      
   svg.selectAll('text.valueLabel')
     .data(weekSlice, d => d.job_year)
@@ -754,18 +781,18 @@ function paintBarViz(data) {
       .style('opacity', 1);
 }
 
-// LINE CHART
+// LINE CHART //
 function paintDataViz(data) {
 
   // Define the dimensions of the SVG
-  var svg = d3.select("#line-chart"),
+  let svg = d3.select("#line-chart"),
     margin = {top: 0, right: 150, bottom: 50, left: 0},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   // Define the x & y ranges and color scale
-  var x = d3.scaleLinear().range([0, width]),
+  let x = d3.scaleLinear().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
       z = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -792,11 +819,11 @@ function paintDataViz(data) {
   * no value yet.
   */
   function findMaxLastWeek(d) {
-    for (var mp = 0; mp <= data.length - 1; mp++) {
-      for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
+    for (let mp = 0; mp <= data.length - 1; mp++) {
+      for (let mw = 0; mw <= data[mp].wks.length - 1; mw++) {
         // Find first NaN instance and return it if TRUE
         if ( Number.isNaN(data[mp].wks[mw]) ) {
-          var week = data[mp].wks.findIndex(firstNaN);
+          let week = data[mp].wks.findIndex(firstNaN);
           return week;
         }
       }
@@ -807,21 +834,21 @@ function paintDataViz(data) {
   function findMaxPost(d) {
     // Returns last week for its index
     function findLastPost(yr) {
-      for (var i = 0; i <= data.length - 1; i++) {
+      for (let i = 0; i <= data.length - 1; i++) {
         if (data[i].yr == yr) { // Get year with NaN
-          for (var j = 0; j <= data[i].wks.length - 1; j++) {
-            var key = data[i].wks.findIndex(firstNaN);
+          for (let j = 0; j <= data[i].wks.length - 1; j++) {
+            let key = data[i].wks.findIndex(firstNaN);
             return key;
           }
         }
       }
     }
-    for (var mp = 0; mp <= data.length - 1; mp++) {
-      for (var mw = 0; mw <= data[mp].wks.length - 1; mw++) {
+    for (let mp = 0; mp <= data.length - 1; mp++) {
+      for (let mw = 0; mw <= data[mp].wks.length - 1; mw++) {
         if ( Number.isNaN(data[mp].wks[mw]) ) {
-          var lastMaxPost = findLastPost(data[mp].yr);
-          var weekIndex = lastMaxPost - 1;
-          var lmp = data[mp].wks[weekIndex];
+          let lastMaxPost = findLastPost(data[mp].yr);
+          let weekIndex = lastMaxPost - 1;
+          let lmp = data[mp].wks[weekIndex];
           return lmp;
         }
       }
@@ -830,7 +857,7 @@ function paintDataViz(data) {
 
   // Retrieve year to add as ID to legend elements
   function addLegendID(d) {
-    var yearID = d.substr(0, 4);
+    let yearID = d.substr(0, 4);
     return "legend-"+yearID;
   }
   /*
@@ -838,7 +865,7 @@ function paintDataViz(data) {
     * Hacky solutions for NaNs: findMaxLastWeek() & findMaxPost()
   */
   // Define the areas for each line
-  var area = d3.area()
+  let area = d3.area()
       .curve(d3.curveBasis)
       .x(function(d) {
         return x( Number.isNaN(d.postings) ? findMaxLastWeek(d) : d.week);
@@ -849,7 +876,7 @@ function paintDataViz(data) {
       });
 
   // Define the lines
-  var line = d3.line()
+  let line = d3.line()
       .curve(d3.curveBasis)
       .x(function(d) {
         return x( Number.isNaN(d.postings) ? findMaxLastWeek(d) : d.week);
@@ -863,9 +890,9 @@ function paintDataViz(data) {
     the processed data really shines to create
     the multiple lines for each year. :-)
   */
-  var marketYears = data.map(function(d) {
-    var wkD = d.wks;
-    var week = 0;
+  let marketYears = data.map(function(d) {
+    let wkD = d.wks;
+    let week = 0;
     return {
       id: d.yr,
       values: wkD.map(function(f) {
@@ -892,7 +919,7 @@ function paintDataViz(data) {
   z.domain(marketYears.map(function(c) { return c.id; }));
 
   // Define the legend
-  var legend = svg.selectAll('g')
+  let legend = svg.selectAll('g')
     .data(marketYears, function(d){ return d; })
     .enter()
     .append('g')
@@ -946,7 +973,7 @@ function paintDataViz(data) {
       .attr("fill", "#000")
       .text("Postings");
 
-  var markYear = g.selectAll(".markYear")
+  let markYear = g.selectAll(".markYear")
     .data(marketYears)
     .enter().append("g")
       .attr("class", "markYear");
@@ -986,14 +1013,13 @@ function paintDataViz(data) {
       .attr("dy", "0.5em")
       .style("font", "14px sans-serif");
 
-
   /**
   *
   *   Mouseover line and circle effect
   *   Modified from src: http://stackoverflow.com/questions/34886070/multiseries-line-chart-with-mouseover-tooltip/34887578#34887578
   *
   **/
-  var mouseG = svg.append("g")
+  let mouseG = svg.append("g")
     .attr("class", "mouse-over-effects");
 
   mouseG.append("path") // this is the black vertical line to follow mouse
@@ -1002,9 +1028,9 @@ function paintDataViz(data) {
     .style("stroke-width", "1px")
     .style("opacity", "0");
 
-  var lines = document.getElementsByClassName('line');
+  let lines = document.getElementsByClassName('line');
 
-  var mousePerLine = mouseG.selectAll('.mouse-per-line')
+  let mousePerLine = mouseG.selectAll('.mouse-per-line')
     .data(marketYears)
     .enter()
     .append("g")
@@ -1044,10 +1070,10 @@ function paintDataViz(data) {
         .style("opacity", "1");
     })
     .on('mousemove', function() { // mouse moving over canvas
-      var mouse = d3.mouse(this);
+      let mouse = d3.mouse(this);
       d3.select(".mouse-line")
         .attr("d", function() {
-          var d = "M" + mouse[0] + "," + height;
+          let d = "M" + mouse[0] + "," + height;
           d += " " + mouse[0] + "," + 0;
           return d;
         });
@@ -1055,13 +1081,13 @@ function paintDataViz(data) {
       d3.selectAll(".mouse-per-line")
         .attr("transform", function(d, i) {
 
-          var xDate = x.invert(mouse[0]),
+          let xDate = x.invert(mouse[0]),
               bisect = d3.bisector(function(d) {
                 return d.postings;
               }).right;
               idx = bisect(d.values, xDate);
 
-          var beginning = 0,
+          let beginning = 0,
               end = lines[i].getTotalLength(),
               target = null;
 
@@ -1079,10 +1105,10 @@ function paintDataViz(data) {
           // Add mouseover label
           legend.select('text')
             .text(function(d) {
-              var weekNum = xDate.toFixed(0);
-              var postNum = d.values[(parseInt(xDate.toFixed(0))-1)].postings;
-              var yrID = d.id;
-              var label;
+              let weekNum = xDate.toFixed(0);
+              let postNum = d.values[(parseInt(xDate.toFixed(0))-1)].postings;
+              let yrID = d.id;
+              let label;
 
               if (Number.isNaN(postNum)) {
                 label = yrID
@@ -1101,11 +1127,143 @@ function paintDataViz(data) {
               return label;
             })
             .attr("transform", function(d) {
-              var weekNum = d.values[(parseInt(xDate.toFixed(0))-1)].week;
+              let weekNum = d.values[(parseInt(xDate.toFixed(0))-1)].week;
               return "translate(5,0)";
             });
 
           return "translate(" + mouse[0] + "," + pos.y +")";
         });
     });
+}
+
+// PREDICTION CHART //
+function paintPredictChart(AVG_POSTS) {
+
+  // Check what week it is; Return week number
+  function checkCurrentWeek(e) {
+    let weekCheck = []
+    for (let i = 0; i <= e.length-1; i++) {
+      if (typeof e[i] === "string") {
+        weekCheck.push(i)
+      }
+    }
+    wcCount = weekCheck.length
+
+    return wcCount
+  }
+
+  let currentWeekCount = checkCurrentWeek(EXISTING)
+
+  //
+  function range(start, end) {
+    let ans = []
+    for (let i = start; i <= end; i++) {
+        ans.push({
+          wk: Number(i)
+        })
+    }
+    return ans
+  }
+
+  //
+  let forecast = range((currentWeekCount+1), 39)
+  let history = range(1, currentWeekCount)
+
+  // Map array of EXISTING post numbers to week numbers
+  function mapExistingWeeksToPosts(w,e) {
+    for (let i = 0; i < w.length; i++) {
+      if (Number(w[i].wk) <= 17) {
+        w[i].posts = Number(e[i])
+      }
+    }
+    return w
+  }
+
+  history = mapExistingWeeksToPosts(history, EXISTING)
+
+  // Accrue posts linearly, based on average projection rate
+  const predictor = (lastWeek, pwp, pt) => {
+    postTracker = postTracker+pwp
+    if (lastWeek != 39) {
+      return postTracker
+    }
+    else {
+      return pt
+    }
+  }
+
+  // Map EXISTING data to history array of objects
+  const historyIndex = history.map((d, i) => [i, d.posts])
+
+  // If it's week 17, then create the chart
+  if ( (historyIndex.length) == 17) {
+    let W17 = historyIndex[historyIndex.length-1][1]
+
+    PT = Math.round( (W17 * (1 - AVG_POSTS))) + W17
+    // Per week posts for trendline simulation
+    let PWP = Math.round( (W17 * (1 - AVG_POSTS))) / 23
+
+    postTracker = W17
+
+    forecast = forecast.map((d, i) => {
+      return {
+        wk: d.wk,
+        posts: predictor(forecast[i].wk, PWP, PT),
+      }
+    })
+
+    forecast.unshift(history[history.length - 1])
+
+    let predictSection = document.querySelector("#prediction-chart")
+
+    predictSection.innerHTML = '<h3>Based on the historical data, predict the number of job postings per week</h3><p>The chart below shows the approximate projected job postings for the remainder of the current job season: 17-39 weeks (dashed tomato-red line). It uses the average percentage of jobs posted by week 17 to project an endpoint visually.</p><svg id="trend-chart" viewBox="0 0 1000 500"></svg>'
+
+    const chart = d3.select('#trend-chart')
+    const forecastMargin = { top: 20, right: 20, bottom: 30, left: 70 }
+    const forecastWidth = 1000 - forecastMargin.left - forecastMargin.right
+    const forecastHeight = 500 - forecastMargin.top - forecastMargin.bottom
+    const innerChart = chart.append('g')
+      .attr('transform', `translate(${forecastMargin.left} ${forecastMargin.top})`)
+
+    const x = d3.scaleLinear().rangeRound([0, forecastWidth])
+    const y = d3.scaleLinear().rangeRound([forecastHeight, 0])
+
+    const line = d3.line()
+      .x(d => x(d.wk))
+      .y(d => y(d.posts))
+
+    x.domain([d3.min(history, d => d.wk), d3.max(forecast, d => d.wk)])
+    y.domain([0, d3.max(forecast, d => d.posts)])
+
+    innerChart.append('g')
+      .attr('transform', `translate(0 ${forecastHeight})`)
+      .call(d3.axisBottom(x))
+
+    innerChart.append('g')
+      .call(d3.axisLeft(y))
+      .append('text')
+      .attr('fill', '#000')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 6)
+      .attr('dy', '1.5em')
+      .attr('text-anchor', 'end')
+      .text('Job postings')
+
+    innerChart.append('path')
+      .datum(history)
+      .attr('fill', 'none')
+      .attr('stroke', '#9467bd')
+      .attr('stroke-width', 3)
+      .attr('stroke-forecastWidth', 1.5)
+      .attr('d', line)
+
+    innerChart.append('path')
+      .datum(forecast)
+      .attr('fill', 'none')
+      .attr('stroke', 'tomato')
+      .attr('stroke-width', 3)
+      .attr('stroke-dasharray', '10,7')
+      .attr('stroke-forecastWidth', 1.5)
+      .attr('d', line)
+  }
 }
