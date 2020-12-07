@@ -56,6 +56,19 @@
             </p>
             <svg id="line-chart" width="1080" height="500"></svg>
 
+            <div id="avg-posts-per-week">
+              <h3>Average (mean) posts per week</h3>
+              <!-- Append chart -->
+              <div id="tooltip" class="tooltip">
+                  <div class="tooltip-week">
+                      Week: <span id="week"></span>
+                  </div>
+                  <div class="tooltip-post">
+                      Average job postings per week: <span id="post"></span>
+                  </div>
+              </div>
+            </div>
+
             <div id="citations">
               <h3>
                 Citations
@@ -400,5 +413,6 @@
   <script type="module" src="./js/getdata.js"></script>
   <script type="module" src="./js/format.js"></script>
   <script type="module" src="./js/racing-bars.js"></script>
+  <script type="module" src="./js/avg-posts-per-week.js"></script>
   <script type="module" src="./js/line.js"></script>
 </html>

@@ -1,6 +1,19 @@
 import { paintMultiLineViz } from './multiline-chart.js';
+import { drawAvgBars } from './avg-posts-per-week.js';
 
 export let EXISTING
+
+export const YEARS = [
+  {yr: "2012-2013",wks:[]},
+  {yr: "2013-2014",wks:[]},
+  {yr: "2014-2015",wks:[]},
+  {yr: "2015-2016",wks:[]},
+  {yr: "2016-2017",wks:[]},
+  {yr: "2017-2018",wks:[]},
+  {yr: "2018-2019",wks:[]},
+  {yr: "2019-2020",wks:[]},
+  {yr: "2020-2021",wks:[]}
+]
 
 function ranker(wk) {
   let listRankedWeeks = [];
@@ -136,6 +149,44 @@ function writeRanks(lwd) {
   return rankedAllWeeks;
 }
 
+/**
+ * 1. Find posts difference between weeks, e.g., wk2-wk1
+ *  
+ */
+function formatAvgBarData(weeklies) {
+  let isNaN = (maybeNaN) => maybeNaN!=maybeNaN
+  let avgTallies = []
+  
+  // loop first week
+  for (let i = 0; i < weeklies.length-1; i++) {
+    // Loop through weeks
+    let diffList = []
+    if (i != weeklies[i].posts.length || i != 0) {
+
+      for (let p = 0; p <= weeklies[i].posts.length-1; p++) {
+        let diff = weeklies[i+1].posts[p] - weeklies[i].posts[p]
+        diffList.push(diff)
+      }
+
+      let avg = 0
+      diffList.forEach(diff => {
+        if (isNaN(diff) != true) {
+          avg = avg+diff
+        }
+      })
+
+      avg = avg / diffList.length
+
+      avgTallies.push({
+        week: i+2,
+        weekLabel: String(i+1)+'-'+String(i+2), 
+        postDiff: avg
+      })
+    }
+  }
+  drawAvgBars(avgTallies)
+}
+
 export function formatBarData(data) {
   // Instantiate arrays for racing-bar week data
   let list_week_dicts = []
@@ -241,152 +292,67 @@ export function formatBarData(data) {
 }
 
 export function formatMultiLineData(data) {
-  let week
 
-  console.log("The requested spreadsheet data in the JSON format\n"
-              +"has been passed as a parameter for the formatData function:\n");
-  console.log(data);
-  // Instantiate arrays for week data
-  let yr1213wks = []
-  let yr1314wks = []
-  let yr1415wks = []
-  let yr1516wks = []
-  let yr1617wks = []
-  let yr1718wks = []
-  let yr1819wks = []
-  let yr1920wks = []
-  let yr2021wks = []
+  function returnColumnNames(str) {
+    const regex = /(justrc\:|rctbw\:|rctbw_\d{1,}\:)/gm
+    let colMatches = ((str || '').match(regex) || [])
+    let cleanMatches = []
 
-  // Instantiate dictionaries/object arrays for year data
-  let yr1213 = {}
-  let yr1314 = {}
-  let yr1415 = {}
-  let yr1516 = {}
-  let yr1617 = {}
-  let yr1718 = {}
-  let yr1819 = {}
-  let yr1920 = {}
-  let yr2021 = {}
-
-  // Get length of JSON object
-  let length = 0;
+    // Clean matches
+    colMatches.forEach(cm =>
+      cleanMatches.push('gsx$'+cm.substring(0,cm.length-1))
+    )
+    return cleanMatches
+  }
+  
+  let length = 0
   for(let k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++;
+  let totalNumberOfYears = returnColumnNames(String(data.feed.entry[0].content.$t))
+  totalNumberOfYears = totalNumberOfYears.length
 
-  // Put week data in array sorted by market years
-  for (let i = 0; i <= length - 1; i++) {
-    // Start the writing of the first entries.
-    if (i === 0) {
-      week = data.feed.entry[i].gsx$_cn6ca.$t
-      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t)
-      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t)
-      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t)
-      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t)
-      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t)
-      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t)
-      yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t)
-      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t)
-      /*
-        For the new market year, check if cell's empty.
-        If empty, type as NaN (Not A Number). If value
-        exists, push the value to the array.
-      */
-      if (data.feed.entry[i].gsx$rctbw_8.$t === "") {
-        yr2021wks.push(Number.NaN)
+  function organizeAsPerYear(pw) {
+    pw.forEach(p => {
+      let pl = p.posts
+      for (let i = 0; i <= pl.length-1; i++) {
+        YEARS[i].wks.push(pl[i])
+      }
+    })
+    paintMultiLineViz(YEARS)
+    EXISTING = YEARS[YEARS.length - 1].wks
+  }
+
+  function organizePerWeek(data) {
+    let wkData = []
+    // Put week data in array sorted by market years
+    for (let i = 0; i <= length - 1; i++) {
+      let allColNamesPerWeek = returnColumnNames(String(data.feed.entry[i].content.$t))
+      let week
+      let posts = []
+      for (let c = 0; c <= allColNamesPerWeek.length-1; c++) {
+        week = String(i+1)
+        let row = data.feed.entry[i]
+        let col = allColNamesPerWeek[c]
+        posts.push(Number(row[col].$t))
+      }
+      // Check posts length, before pushing to list
+      if ( (totalNumberOfYears - posts.length) == 1) {
+        // Add Nan, since week not complete for current year
+        posts.push(NaN)
+        wkData.push({
+          wk:data.feed.entry[i].gsx$_cn6ca.$t,
+          posts:posts
+        })
       }
       else {
-        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t)
+        // If week posted, push to main data
+        wkData.push({
+          wk:data.feed.entry[i].gsx$_cn6ca.$t,
+          posts:posts
+        })
       }
     }
-    // After first series of array entries, write the rest.
-    else {
-      week = data.feed.entry[i].gsx$_cn6ca.$t
-      yr1213wks.push(data.feed.entry[i].gsx$justrc.$t)
-      yr1314wks.push(data.feed.entry[i].gsx$rctbw.$t)
-      yr1415wks.push(data.feed.entry[i].gsx$rctbw_2.$t)
-      yr1516wks.push(data.feed.entry[i].gsx$rctbw_3.$t)
-      yr1617wks.push(data.feed.entry[i].gsx$rctbw_4.$t)
-      yr1718wks.push(data.feed.entry[i].gsx$rctbw_5.$t)
-      yr1819wks.push(data.feed.entry[i].gsx$rctbw_6.$t)
-      yr1920wks.push(data.feed.entry[i].gsx$rctbw_7.$t)
-      /*
-        For the new market year, check if cell's empty.
-        If empty, type as NaN (Not A Number). If value
-        exists, push the value to the array.
-      */
-      if (data.feed.entry[i].gsx$rctbw_8.$t === "") {
-        yr2021wks.push(Number.NaN)
-      }
-      else {
-        yr2021wks.push(data.feed.entry[i].gsx$rctbw_8.$t)
-      }
-    }
-    console.log("Writing out the 17 weeks for each year.")
+    organizeAsPerYear(wkData)
+    formatAvgBarData(wkData)// start creating average posts per week
   }
-  console.log("After the _for_ loop, here\'s an example array, yr1213wks:\n")
-  console.log(yr1213wks)
-  writeYears()
-
-  /*
-    Bind week arrays to market years.
-    Note how I don't need to pass anything as an
-    argument for writeYears(), since all of the
-    necessary letiables have been declared within
-    the scope of formatData(){...}.
-  */
-  function writeYears() {
-    console.log("writeYears() binds the week arrays to market years.")
-    yr1213 = {
-      yr:"2012 - 2013",
-      wks:yr1213wks
-    };
-    yr1314 = {
-      yr:"2013 - 2014",
-      wks:yr1314wks
-    };
-    yr1415 = {
-      yr:"2014 - 2015",
-      wks:yr1415wks
-    };
-    yr1516 = {
-      yr:"2015 - 2016",
-      wks:yr1516wks
-    };
-    yr1617 = {
-      yr:"2016 - 2017",
-      wks:yr1617wks
-    };
-    yr1718 = {
-      yr:"2017 - 2018",
-      wks:yr1718wks
-    };
-    yr1819 = {
-      yr:"2018 - 2019",
-      wks:yr1819wks
-    };
-    yr1920 = {
-      yr:"2019 - 2020",
-      wks:yr1920wks
-    };
-    yr2021 = {
-      yr:"2020 - 2021",
-      wks:yr2021wks
-    };
-    console.log("After writeYears is complete, here\'s an example object array that binds the year string label with the array list of the weekly posting data, yr1213:\n");
-    console.log(yr1213);
-    writeMarketData();
-  }
-
-  // Join all object arrays as one array object
-  function writeMarketData() {
-    // Define explicit data-types for per Year data
-    let yrData = []
-    yrData.push(yr1213,yr1314,yr1415,yr1516,yr1617,yr1718,yr1819,yr1920,yr2021)
-    console.log("writeMarketData() combines all of the yearly object arrays into one complete object array, yrData:\n")
-    console.log(yrData)
-    console.log("\nNow, the data are processed and ready to send as an argument to paintDataViz().")
-    
-    paintMultiLineViz(yrData)
-
-    EXISTING = yrData[yrData.length - 1].wks    
-  }
+  organizePerWeek(data)
 }

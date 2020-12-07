@@ -19,8 +19,6 @@ export function getSSD(rurl) {
       }
 
       if (xhr.status === 200) {
-        console.log("Retrieved spreadsheet data.\n"
-                  +"Parsed it as a JSON object:\n")
         resolve(JSON.parse(xhr.responseText));
       } else {
         console.warn('request_error')

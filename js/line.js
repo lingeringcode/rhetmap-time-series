@@ -39,9 +39,7 @@ async function drawCharts() {
       data => {
         fwyd = formatBarData(data)
         paintBarViz(fwyd)
-        
-        formatMultiLineData(data)
-
+        formatMultiLineData(data) //Also kickstarts AvgBarData
         // Now retrieve data for prediction chart
         getSSD(apURL).then(apData => isolateAverage(apData))
       }
