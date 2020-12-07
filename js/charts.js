@@ -771,7 +771,7 @@ function paintBarViz(data) {
 
 }
     
- const halo = function(text, strokeWidth) {
+const halo = function(text, strokeWidth) {
   text.select(function() {
     return this.parentNode.insertBefore(this.cloneNode(true), this); })
       .style('fill', '#ffffff')
