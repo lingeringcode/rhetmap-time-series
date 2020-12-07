@@ -121,8 +121,6 @@ export function paintMultiLineViz(data) {
     };
   });
 
-  console.log(marketYears)
-
   // Set the domains of the axes
   x.domain([
     parseInt(marketYears[0].values[0].week),
