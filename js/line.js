@@ -26,9 +26,10 @@ async function drawCharts() {
     // Get length of JSON object
     let length = 0
     for(let k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++
+    
     // Assign average total percentages of posts after Jan. 1
     let AVG_POSTS = Number(data.feed.entry[length-1].gsx$postpercentagebywk17.$t)
-
+    
     paintPredictChart(AVG_POSTS)
   }
   

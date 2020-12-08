@@ -1,14 +1,14 @@
 import { EXISTING } from './format.js';
 
 export function paintPredictChart(AVG_POSTS) {
-
+  let isItNaN = (maybeNaN) => maybeNaN!=maybeNaN
   let postTracker = 0
 
   // Check what week it is; Return week number
   function checkCurrentWeek(e) {
     let weekCheck = []
     for (let i = 0; i <= e.length-1; i++) {
-      if (typeof e[i] === "string") {
+      if (isItNaN(e[i]) != true) {
         weekCheck.push(i)
       }
     }
@@ -19,7 +19,6 @@ export function paintPredictChart(AVG_POSTS) {
 
   let currentWeekCount = checkCurrentWeek(EXISTING)
 
-  //
   function range(start, end) {
     let ans = []
     for (let i = start; i <= end; i++) {
