@@ -3,6 +3,7 @@ export function drawAvgBars(dataset) {
   // 1. Access data
   const yAccessor = d => d.postDiff
   const xAccessor = d => d.week
+  const weekAccessor = d => d.weekLabel
 
   // 2. Create chart dimensions
 
@@ -118,10 +119,11 @@ export function drawAvgBars(dataset) {
     const closestDataPoint = dataset[closestIndex]
 
     const closestXValue = xAccessor(closestDataPoint)
+    const closestWeekValue = weekAccessor(closestDataPoint)
     const closestYValue = yAccessor(closestDataPoint)
 
     tooltip.select("#week")
-        .text(closestXValue)
+        .text(closestWeekValue)
 
     const formatPost = d => `${d3.format(".1f")(d)}`
     tooltip.select("#post")
