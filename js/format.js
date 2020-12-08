@@ -15,22 +15,7 @@ export const YEARS = [
   {yr: "2020-2021",wks:[]}
 ]
 
-function ranker(wk) {
-  let listRankedWeeks = [];
-  wk.sort(function(a, b) {
-    return parseFloat(b.posting_total) - parseFloat(a.posting_total);
-  });
-  let rank = 1;
-  for (let wi = 0; wi <= wk.length-1; wi++) {
-    wk[wi]["rank"] = String(rank);
-    listRankedWeeks.push(wk);
-    rank++
-  }
-  return listRankedWeeks;
-}
-
 function writePriorPostings(raw) {
-  let newList = []
   // rank by weeks
   raw.forEach(function(r){
     // loop thru list of dict objs
@@ -44,109 +29,40 @@ function writePriorPostings(raw) {
       raw.forEach(function(row){
         if ( (row["job_year"] == r["job_year"]) && (row["week"] == (r["week"]-1))) {
           if (row["posting_total"] != 0) {
-            r["last_posting_total"] = row["posting_total"];
+            r["last_posting_total"] = row["posting_total"]
           }
           // if no postings, then append previous weeks total
           else if (row["posting_total"] == 0) {
-            r["last_posting_total"] = row["last_posting_total"];
+            r["last_posting_total"] = row["last_posting_total"]
           }
         }
-      });
+      })
     }
-  });
-  return raw;
+  })
+  return raw
 }
 
 function writeRanks(lwd) {
-  let w1 = [];
-  let w2 = [];
-  let w3 = [];
-  let w4 = [];
-  let w5 = [];
-  let w6 = [];
-  let w7 = [];
-  let w8 = [];
-  let w9 = [];
-  let w10 = [];
-  let w11 = [];
-  let w12 = [];
-  let w13 = [];
-  let w14 = [];
-  let w15 = [];
-  let w16 = [];
-  let w17 = [];
-
-  // rank by weeks
+  let allWeeksList = []
+  // Rank by weeks
   lwd.forEach(function(l){
     for (const [key, value] of Object.entries(l)) {
-      let w;
-
+      let w
       if (key == "week") {
-        w = value;
-        if (w == 1){
-          w1.push(l);
-        }
-        else if (w == 2){
-          w2.push(l);
-        }
-        else if (w == 3){
-          w3.push(l);
-        }
-        else if (w == 4){
-          w4.push(l);
-        }
-        else if (w == 5){
-          w5.push(l);
-        }
-        else if (w == 6){
-          w6.push(l);
-        }
-        else if (w == 7){
-          w7.push(l);
-        }
-        else if (w == 8){
-          w8.push(l);
-        }
-        else if (w == 9){
-          w9.push(l);
-        }
-        else if (w == 10){
-          w10.push(l);
-        }
-        else if (w == 11){
-          w11.push(l);
-        }
-        else if (w == 12){
-          w12.push(l);
-        }
-        else if (w == 13){
-          w13.push(l);
-        }
-        else if (w == 14){
-          w14.push(l);
-        }
-        else if (w == 15){
-          w15.push(l);
-        }
-        else if (w == 16){
-          w16.push(l);
-        }
-        else if (w == 17){
-          w17.push(l);
-        }
+        w = value
+        allWeeksList.push({
+          week:w,
+          rank:l.rank,
+          colour:l.colour,
+          job_year: l.job_year,
+          last_posting_total: l.last_posting_total,
+          posting_total: l.posting_total
+        })
       }
     }
-  });
-
-  // send to get ranked per week 
-  let allWeeks = [w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15,w16,w17];
-  let rankedAllWeeks = [];
-  for (let aa = 0; aa <= allWeeks.length-1; aa++) {
-    for (let awi = 0; awi <= allWeeks[aa].length-1; awi++) {
-      rankedAllWeeks.push(allWeeks[aa][awi]);
-    }
-  }
-  return rankedAllWeeks;
+  })
+  
+  return allWeeksList
 }
 
 let isNaN = (maybeNaN) => maybeNaN!=maybeNaN
@@ -300,6 +216,7 @@ export function formatBarData(data) {
       index++
     }
   }
+
   let rankedAllWeeks = writeRanks(list_week_dicts)
   fullWeeklyData = writePriorPostings(rankedAllWeeks)
 
