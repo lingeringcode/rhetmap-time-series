@@ -149,12 +149,25 @@ function writeRanks(lwd) {
   return rankedAllWeeks;
 }
 
+let isNaN = (maybeNaN) => maybeNaN!=maybeNaN
+
+function getStandardDeviation(w) {
+  let noNan = []
+  w.forEach(r => {
+    if (isNaN(r) != true) {
+      noNan.push(r)
+    }
+  })
+  const n = noNan.length
+  const mean = noNan.reduce((a, b) => a + b) / n
+  return Math.sqrt(noNan.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+}
+
 /**
  * 1. Find posts difference between weeks, e.g., wk2-wk1
  *  
  */
 function formatAvgBarData(weeklies) {
-  let isNaN = (maybeNaN) => maybeNaN!=maybeNaN
   let avgTallies = []
   
   // loop first week
@@ -176,11 +189,13 @@ function formatAvgBarData(weeklies) {
       })
 
       avg = avg / diffList.length
+      let stDev = getStandardDeviation(diffList)
 
       avgTallies.push({
         week: i+2,
         weekLabel: String(i+1)+'-'+String(i+2), 
-        postDiff: avg
+        postDiff: avg,
+        stDev: stDev
       })
     }
   }
