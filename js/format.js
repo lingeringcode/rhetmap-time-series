@@ -15,6 +15,26 @@ export const YEARS = [
   {yr: "2020-2021",wks:[]}
 ]
 
+let isNaN = (maybeNaN) => maybeNaN!=maybeNaN
+
+function countFeedLength(e) {
+  let length = 0
+  for(let k in e) if(e.hasOwnProperty(k)) length++;
+  return length
+}
+
+function returnColumnNames(str) {
+  const regex = /(justrc\:|rctbw\:|rctbw_\d{1,}\:)/gm
+  let colMatches = ((str || '').match(regex) || [])
+  let cleanMatches = []
+
+  // Clean matches
+  colMatches.forEach(cm =>
+    cleanMatches.push('gsx$'+cm.substring(0,cm.length-1))
+  )
+  return cleanMatches
+}
+
 function writePriorPostings(raw) {
   // rank by weeks
   raw.forEach(function(r){
@@ -65,8 +85,6 @@ function writeRanks(lwd) {
   return allWeeksList
 }
 
-let isNaN = (maybeNaN) => maybeNaN!=maybeNaN
-
 function getStandardDeviation(w) {
   let noNan = []
   w.forEach(r => {
@@ -79,10 +97,6 @@ function getStandardDeviation(w) {
   return Math.sqrt(noNan.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
 }
 
-/**
- * 1. Find posts difference between weeks, e.g., wk2-wk1
- *  
- */
 function formatAvgBarData(weeklies) {
   let avgTallies = []
   
@@ -119,103 +133,38 @@ function formatAvgBarData(weeklies) {
 }
 
 export function formatBarData(data) {
-  // Instantiate arrays for racing-bar week data
   let list_week_dicts = []
   let fullWeeklyData = []
 
-  let entries = data.feed.entry;
-  
-  // Get length of JSON object
-  let length = 0;
-  for(let k in entries) if(entries.hasOwnProperty(k)) length++;
+  let entries = data.feed.entry
 
-  // Put week data in array sorted by week
-  for (let i = 0; i <= length - 1; i++) {
-    const weekObject = entries[i];
-    let index = 0;
-    let wk = 0;
-    for (const [key, value] of Object.entries(weekObject)) {
-      if (index == 6) {//Week
-          wk = (value.$t).slice(5,7);
-          wk = Number(wk);
-      }
-      else if (index == 7){
-        let job_year = "2012-2013";
-        let posting_total = 0;
-        if (!Number.isNaN(Number(value.$t))){
-          posting_total = Number(value.$t);
-          let entry = { week:wk, job_year:job_year, posting_total:posting_total};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 8) {
-        let jy2 = "2013-2014";
-        if (!Number.isNaN(Number(value.$t))){
-          let pt2 = Number(value.$t);
-          let entry = { week:wk, job_year:jy2, posting_total:pt2};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 9) {
-        let jy3 = "2014-2015";
-        if (!Number.isNaN(Number(value.$t))){
-          let pt3 = Number(value.$t);
-          let entry = { week:wk, job_year:jy3, posting_total:pt3};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 10) {
-        let jy4 = "2015-2016";
-        if (!Number.isNaN(Number(value.$t))){
-          let pt4 = Number(value.$t);
-          let entry = { week:wk, job_year:jy4, posting_total:pt4};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 11) {
-        let jy5 = "2016-2017";
-        if (!Number.isNaN(Number(value.$t))){
-          let pt5 = Number(value.$t);
-          let entry = { week:wk, job_year:jy5, posting_total:pt5};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 12) {
-        let jy6 = "2017-2018";
-        if (!Number.isNaN(Number(value.$t))){
-          let pt6 = Number(value.$t);
-          let entry = { week:wk, job_year:jy6, posting_total:pt6};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 13) {
-        let jy7 = "2018-2019";
-        if (!Number.isNaN(Number(value.$t))){
-          let pt7 = Number(value.$t);
-          let entry = { week:wk, job_year:jy7, posting_total:pt7};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 14) {
-        let jy8 = "2019-2020";
-        if (!Number.isNaN(Number(value.$t))){
-          let pt8 = Number(value.$t);
-          let entry = { week:wk, job_year:jy8, posting_total:pt8};
-          list_week_dicts.push(entry)
-        }
-      }
-      else if (index == 15) {
-        let jy9 = "2020-2021";
-        if ( !Number.isNaN(Number(value.$t)) > 0) {
-          let pt9 = Number(value.$t);
-          let entry = { week:wk, job_year:jy9, posting_total:pt9};
-          list_week_dicts.push(entry)
-        }
-      }
+  let colNames = returnColumnNames(String(entries[0].content.$t))
 
-      index++
-    }
-  }
+  entries.forEach( e => {
+    let jy = 2012
+    colNames.forEach( c => {
+      let jyString = jy+'-'+(jy+1)
+      jyString = String(jyString)
+
+      if (isNaN(e[c].$t) == true) {
+        let row = {
+          week: (e.gsx$_cn6ca.$t).slice(5,7), 
+          job_year: jyString, 
+          posting_total: NaN
+        }
+        list_week_dicts.push(row)
+      }
+      else {
+        let row = {
+          week: (e.gsx$_cn6ca.$t).slice(5,7), 
+          job_year: jyString, 
+          posting_total: e[c].$t
+        }
+        list_week_dicts.push(row)
+      }
+      jy++
+    })
+  })
 
   let rankedAllWeeks = writeRanks(list_week_dicts)
   fullWeeklyData = writePriorPostings(rankedAllWeeks)
@@ -224,31 +173,21 @@ export function formatBarData(data) {
 }
 
 export function formatMultiLineData(data) {
-
-  function returnColumnNames(str) {
-    const regex = /(justrc\:|rctbw\:|rctbw_\d{1,}\:)/gm
-    let colMatches = ((str || '').match(regex) || [])
-    let cleanMatches = []
-
-    // Clean matches
-    colMatches.forEach(cm =>
-      cleanMatches.push('gsx$'+cm.substring(0,cm.length-1))
-    )
-    return cleanMatches
-  }
   
-  let length = 0
-  for(let k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++;
+  let length = countFeedLength(data.feed.entry)
+
   let totalNumberOfYears = returnColumnNames(String(data.feed.entry[0].content.$t))
   totalNumberOfYears = totalNumberOfYears.length
 
   function organizeAsPerYear(pw) {
+
     pw.forEach(p => {
       let pl = p.posts
       for (let i = 0; i <= pl.length-1; i++) {
         YEARS[i].wks.push(pl[i])
       }
     })
+    
     paintMultiLineViz(YEARS)
     EXISTING = YEARS[YEARS.length - 1].wks
   }
@@ -283,6 +222,7 @@ export function formatMultiLineData(data) {
         })
       }
     }
+
     organizeAsPerYear(wkData)
     formatAvgBarData(wkData)// start creating average posts per week
   }
