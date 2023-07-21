@@ -14,6 +14,9 @@ async function drawCharts() {
   /**
    * Assign URLs Make sure it is public and
    * set the sheet to 'Anyone with link can view'
+   * 
+   * NEW: https://www.googleapis.com/auth/spreadsheets.readonly
+   * https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId/values/Sheet1
    */
   let mcURL = "https://spreadsheets.google.com/feeds/list/" 
               + marketComparisonID
@@ -21,6 +24,23 @@ async function drawCharts() {
   let apURL = "https://spreadsheets.google.com/feeds/list/" 
               + avgPercentageSheetID
               + "/1/public/values?alt=json"
+
+  function getValues(spreadsheetId, range, callback) {
+    try {
+      gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: spreadsheetId,
+        range: range,
+      }).then((response) => {
+        const result = response.result;
+        const numRows = result.values ? result.values.length : 0;
+        console.log(`${numRows} rows retrieved.`);
+        if (callback) callback(response);
+      });
+    } catch (err) {
+      document.getElementById('content').innerText = err.message;
+      return;
+    }
+  }
 
   function isolateAverage(data) {
     // Get length of JSON object

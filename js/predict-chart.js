@@ -87,7 +87,7 @@ export function paintPredictChart(AVG_POSTS) {
     const forecastWidth = 1000 - forecastMargin.left - forecastMargin.right
     const forecastHeight = 500 - forecastMargin.top - forecastMargin.bottom
     const innerChart = chart.append('g')
-      .attr('transform', `translate(${forecastMargin.left} ${forecastMargin.top})`)
+      .attr('transform', `translate(${forecastMargin.left} ${forecastMargin.top})`) 
 
     const x = d3.scaleLinear().rangeRound([0, forecastWidth])
     const y = d3.scaleLinear().rangeRound([forecastHeight, 0])

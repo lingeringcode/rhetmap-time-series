@@ -1,431 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rhetoric, Composition, and Technical Communication Job Postings per Year</title>
-    <meta name="description" content="Rhetoric, Composition, and Technical Communication Job Postings per Year" />
-    <meta name="keywords" content="rhetoric and composition, job market, infographic, d3.js" />
-    <meta name="author" content="Chris Lindgren" />
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rhetoric/Composition &amp; TPC Job Postings per Year</title>
+  <meta name="description" content="Rhetoric, Composition, and Technical Communication Job Postings per Year">
+  <meta name="author" content="Chris Lindgren">
 
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css' />
-
-    <script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
-    <!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
-    <!-- js libs -->
-    <script type="text/javascript" src="js/d3.v5.min.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>Rhetoric, Composition, and Technical Communication Job Postings per Year</h1>
-        <div>
-          <p>
-            Review Rhetmap.org's 'market comparison' data and a broader census of the market overall.
-          </p>
-          <nav>
-            <ul>
-              <li>
-                <a href="#bar-chart">Rhetmap.org Weeks 1-17</a>
-              </li>
-              <li>
-                <a href="#job-wiki">Rhetoric &amp; Composition Job Census</a>
-              </li>
-            </ul>
-          </nav>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
+  <!-- js libs -->
+  <script src="js/modernizr.custom.79639.js"></script>
+  <script src="js/d3.v5.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Rhetoric, Composition, and Technical Communication Job Postings per Year</h1>
+      <div>
+        <p>
+          Review Rhetmap.org's 'market comparison' data and a broader census of the market overall.
+        </p>
+        <nav>
+          <ul>
+            <li>
+              <a href="#bar-chart">Rhetmap.org Weeks 1-17</a>
+            </li>
+            <li>
+              <a href="#job-wiki">Rhetoric &amp; Composition Job Census</a>
+            </li>
+          </ul>
+        </nav>
+        <div id="citations">
+          <ul>
+            <li>
+              Data visualization created by <a href="https://clndgrn.com/" target="_blank" rel="noopener">Chris Lindgren</a>.
+            <li>
+              Data from Jim Ridolfo's "RhetMap - Market Comparison" spreadsheet: <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">http://rhetmap.org/market-comparison/</a>.
+            <li>
+              See the code and references within the code in the repository hosted on Github: <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">https://github.com/lingeringcode/rhetmap-time-series</a>.
+          </ul>
         </div>
-      </header>
-      <main>
-        
-        <article id="chart-container">
-          <h2>Rhetmap.org: Tracking Weeks 1-17</h2>
-          <section id="racing-bar-chart">
-            <h3>"Racing" bar chart: Comparing each year's job postings per week until week 17/January 1</h3>
-            <p>
-              Current year only includes values up until the available weekly <a href="http://rhetmap.org/market-comparison/">rhetmap data</a>.
-            </p>
-            <div id="bar-chart"></div>
-          </section>
-          
-          <section id="annotated-multiline-chart">
-            <h3>Annotated multi-line chart: Comparing each year's job postings per week until week 17/January 1</h3>
-            <p>
-              To compare the yearly data per week, either hover your mouse over the chart below, or click and drag your mouse within the chart's area.
-            </p>
-            <svg id="line-chart" width="1080" height="500"></svg>
+      </div>
+    </header>
+    <main>
+      <article id="chart-container">
+        <h2>Rhetmap.org: Tracking Weeks 1-17</h2>
+        <section id="racing-bar-chart">
+          <h3>"Racing" bar chart: Comparing each year's job postings per week until week 17/January 1</h3>
+          <p>
+            Current year only includes values up until the available weekly <a href="http://rhetmap.org/market-comparison/">rhetmap data</a>.
+          </p>
+          <div id="bar-chart"></div>
+        </section>
+        <section id="annotated-multiline-chart">
+          <h3>Annotated multi-line chart: Comparing each year's job postings per week until week 17/January 1</h3>
+          <p>
+            To compare the yearly data per week, either hover your mouse over the chart below, or click and drag your mouse within the chart's area.
+          </p>
+          <svg id="line-chart" width="1080" height="500"></svg>
 
-            <div id="prediction-chart">
-              <!-- Append prediction chart after week 17 -->
+          <!-- <div id="prediction-chart"></div> -->
+
+          <!-- <div id="avg-posts-per-week">
+            <h3>Average (mean) posts per week</h3>
+            <p>
+              Tap, click and drag, or hover your mouse within the chart below for more information.
+            </p>
+            <div id="tooltip" class="tooltip">
+                <div class="tooltip-week">
+                    Weeks <span id="week"></span>
+                </div>
+                <div class="tooltip-post">
+                    Average job postings per week: <span id="post"></span>
+                    <br />
+                    Standard deviation: <span id="st-dev"></span>
+                </div>
             </div>
+          </div> -->
 
-            <div id="avg-posts-per-week">
-              <h3>Average (mean) posts per week</h3>
+          <div id="computed-values">
+            <h3>
+              Totals for each season by July 1st:
+            </h3>
+
+            <table class="table striped">
+              <thead>
+                <tr>
+                  <th class="fifteen">
+                    Season Year
+                  </th>
+                  <th class="fifteen">
+                    Total Posts
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr>
+                  <td class="fifteen">
+                    2012-2013
+                  </td>
+                  <td class="fifteen">
+                    278
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2013-2014
+                  </td>
+                  <td class="fifteen">
+                    318
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2014-2015
+                  </td>
+                  <td class="fifteen">
+                    325
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2015-2016
+                  </td>
+                  <td class="fifteen">
+                    273
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2016-2017
+                  </td>
+                  <td class="fifteen">
+                    243
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2017-2018
+                  </td>
+                  <td class="fifteen">
+                    280
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2018-2019
+                  </td>
+                  <td class="fifteen">
+                    220
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2019-2020
+                  </td>
+                  <td class="fifteen">
+                    203
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <h3>
+              Percentage of season advertised by Jan 3rd:
+            </h3>
+
+            <table class="table striped">
+              <thead>
+                <tr>
+                  <th class="fifteen">
+                    Season Year
+                  </th>
+                  <th class="fifteen">
+                    % Total Posts
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr>
+                  <td class="fifteen">
+                    2012-2013
+                  </td>
+                  <td class="fifteen">
+                    73.74%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2013-2014
+                  </td>
+                  <td class="fifteen">
+                    73.58%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2014-2015
+                  </td>
+                  <td class="fifteen">
+                    73.23%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2015-2016
+                  </td>
+                  <td class="fifteen">
+                    73.62%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2016-2017
+                  </td>
+                  <td class="fifteen">
+                    73.25%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2017-2018
+                  </td>
+                  <td class="fifteen">
+                    70.71%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2018-2019
+                  </td>
+                  <td class="fifteen">
+                    69.54%
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fifteen">
+                    2019-2020
+                  </td>
+                  <td class="fifteen">
+                    77.83%
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+          </div>
+
+          <div id="limitations">
+            <h3>Limitations of the "Market Comparison" Data</h2>
+            <p>
+              The following is an excerpt from Ridolfo &amp; Lindgren (2019), where Ridolfo notes the limitations of the "Market Comparison" data set:
+            </p>
+            <blockquote>
+              The rhetmap data originally mirrored the MLA JIL’s Composition & Rhetoric (C/R) listings (2012-2013), then both the C/R and Technical and Business Writing (TBW) listings (2013-2014). It did not begin as a long-term data collection project. In 2014-2015, rhetmap began accepting listings for a donation to a field fund that are not on the MLA JIL. By 2018-2019, direct listings on rhetmap.org now make up approximately 11% of advertisements.. There are thus a few specific limitations to the evolving dataset over time. First, different silos are measured (with some overlap) on the MLA JIL between 2012-2014. While some 2012-2013 TBW jobs are cross-listed in the CR category, not all were. As rhetmap.org began to accept job advertisement submissions in 2014-2015, the project no longer became a direct mirror of the MLA JIL. That said, neither the combined MLA JIL or rhetmap listings are a complete snapshot of the total market. While rhetmap.org maintains a low barrier to job submissions (a small field donation to a fund on the honor system), some jobs will only be listed on sites such as InsideHigherEd, Chronicle, local HR websites, or field listservs. The comparative usefulness of the data, long-term, should be viewed with those concerns in mind.
+            </blockquote>
+          </div>
+        </section>
+      </article>
+      <hr style="margin:6em 0">
+      <article id="job-wiki">
+        <section>
+          <h2>(Informal) Rhetoric &amp; Composition Job Census</h2>
+
+          <p>
+            <strong>Beyond the initial 17 weeks tracked by rhetmap.org, how many jobs are offered each year in Rhetoric and Composition?</strong> To answer this question, the results below are generated from an informal census count of the jobs advertised each year by using the <a href="https://academicjobs.wikia.org/" rel="nofollow">Academic Jobs Wiki</a> as its source.
+          </p>
+          <p>
+            The below charts were generated from scraped data from the 2011-2020 Rhetorican &amp; Composition Academic Job Wiki pages. I modified Ryan Heuser's <a href="https://github.com/quadrismegistus/jobcensus" target="_blank" rel="noopenner">jobcensus</a> repo designed for English Studies. (See my source code here: <a href="https://github.com/lingeringcode/rc-jobcensus" target="_blank" rel="noopenner">rc-jobcensus</a>).
+          </p>
+          <p>
+            <strong>Note</strong>: Please remember that the latest job year will only reflect the total since it was last scraped. This chart <em>excludes</em> Postdoctoral positions from the recently cross-linked 'Humanities &amp; Social Sceince Postdocs' page in 2020.
+          </p>
+          <p>
+            I am also identifying some data-quirks, so please consider the below results with that information in mind. If you have any questions, please feel free to contact me.
+          </p>
+
+          <h3>2011-2020: Rhetoric &amp; Composition Jobs Overall (excluding postdocs)</h3>
+          <figure id="job-wiki-overall">
+            <img src="images/rc-jobs-overall.svg" alt="Chart that conveys an overall decline in the number of all academic positions between 2011 and the current market year." />
+            <figcaption>
               <p>
-                Tap, click and drag, or hover your mouse within the chart below for more information.
+                Chart that conveys an overall decline in the number of all academic positions between 2011 and the current market year.
               </p>
-              <!-- Append chart -->
-              <div id="tooltip" class="tooltip">
-                  <div class="tooltip-week">
-                      Weeks <span id="week"></span>
-                  </div>
-                  <div class="tooltip-post">
-                      Average job postings per week: <span id="post"></span>
-                      <br />
-                      Standard deviation: <span id="st-dev"></span>
-                  </div>
-              </div>
-            </div>
+            </figcaption>
+          </figure>
 
-            <div id="citations">
-              <h3>
-                Citations
-              </h3>
-              <ul>
-                <li>
-                  Data visualization created by <a href="https://clndgrn.com/" target="_blank" rel="noopener">Chris Lindgren</a>.
-                <li>
-                  Data from Jim Ridolfo's "RhetMap - Market Comparison" spreadsheet: <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">http://rhetmap.org/market-comparison/</a>.
-                <li>
-                  See the code and references within the code in the repository hosted on Github: <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">https://github.com/lingeringcode/rhetmap-time-series</a>.
-              </ul>
-            </div>
-
-            <div id="computed-values">
-              <h3>
-                Totals for each season by July 1st:
-              </h3>
-
-              <table class="table striped">
-                <thead>
-                  <tr>
-                    <th class="fifteen">
-                      Season Year
-                    </th>
-                    <th class="fifteen">
-                      Total Posts
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <tr>
-                    <td class="fifteen">
-                      2012-2013
-                    </td>
-                    <td class="fifteen">
-                      278
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2013-2014
-                    </td>
-                    <td class="fifteen">
-                      318
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2014-2015
-                    </td>
-                    <td class="fifteen">
-                      325
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2015-2016
-                    </td>
-                    <td class="fifteen">
-                      273
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2016-2017
-                    </td>
-                    <td class="fifteen">
-                      243
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2017-2018
-                    </td>
-                    <td class="fifteen">
-                      280
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2018-2019
-                    </td>
-                    <td class="fifteen">
-                      220
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2019-2020
-                    </td>
-                    <td class="fifteen">
-                      203
-                    </td>
-                  </tr>
-
-                </tbody>
-              </table>
-
-              <h3>
-                Percentage of season advertised by Jan 3rd:
-              </h3>
-
-              <table class="table striped">
-                <thead>
-                  <tr>
-                    <th class="fifteen">
-                      Season Year
-                    </th>
-                    <th class="fifteen">
-                      % Total Posts
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <tr>
-                    <td class="fifteen">
-                      2012-2013
-                    </td>
-                    <td class="fifteen">
-                      73.74%
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2013-2014
-                    </td>
-                    <td class="fifteen">
-                      73.58%
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2014-2015
-                    </td>
-                    <td class="fifteen">
-                      73.23%
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2015-2016
-                    </td>
-                    <td class="fifteen">
-                      73.62%
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2016-2017
-                    </td>
-                    <td class="fifteen">
-                      73.25%
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2017-2018
-                    </td>
-                    <td class="fifteen">
-                      70.71%
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2018-2019
-                    </td>
-                    <td class="fifteen">
-                      69.54%
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="fifteen">
-                      2019-2020
-                    </td>
-                    <td class="fifteen">
-                      77.83%
-                    </td>
-                  </tr>
-
-                </tbody>
-              </table>
-
-            </div>
-
-            <div id="limitations">
-              <h3>Limitations of the "Market Comparison" Data</h2>
+          <h3>2011-2020: Rhetoric &amp; Composition Jobs by Type</h3>
+          <p>
+            <strong>NOTE</strong>: The job-type chart below <em>includes</em> postdoctoral positions from the recently cross-linked 'Humanities &amp; Social Science Postdocs' page in 2020. Consequently, more results that may not be relevant to our discipline may be included below. Furthermore, this provenance of the data explains the spike in postdoctoral positions in 2020.
+          </p>
+          <figure id="job-wiki-job-type">
+            <img src="images/rc-job-type.svg" alt="Chart that conveys the number of academic positions categorized by its type between 2011 and the current market year. For example, tenure-track, non tenure-track, postdoc, and unknown positions." />
+            <figcaption>
               <p>
-                The following is an excerpt from Ridolfo &amp; Lindgren (2019), where Ridolfo notes the limitations of the "Market Comparison" data set:
+                Chart that conveys the number of academic positions categorized by its type between 2011 and the current market year: Tenure-track, non tenure-track, postdoc, and unknown positions.
               </p>
-              <blockquote>
-                The rhetmap data originally mirrored the MLA JIL’s Composition & Rhetoric (C/R) listings (2012-2013), then both the C/R and Technical and Business Writing (TBW) listings (2013-2014). It did not begin as a long-term data collection project. In 2014-2015, rhetmap began accepting listings for a donation to a field fund that are not on the MLA JIL. By 2018-2019, direct listings on rhetmap.org now make up approximately 11% of advertisements.. There are thus a few specific limitations to the evolving dataset over time. First, different silos are measured (with some overlap) on the MLA JIL between 2012-2014. While some 2012-2013 TBW jobs are cross-listed in the CR category, not all were. As rhetmap.org began to accept job advertisement submissions in 2014-2015, the project no longer became a direct mirror of the MLA JIL. That said, neither the combined MLA JIL or rhetmap listings are a complete snapshot of the total market. While rhetmap.org maintains a low barrier to job submissions (a small field donation to a fund on the honor system), some jobs will only be listed on sites such as InsideHigherEd, Chronicle, local HR websites, or field listservs. The comparative usefulness of the data, long-term, should be viewed with those concerns in mind.
-              </blockquote>
-            </div>
-          </section>
-        </article>
-        <hr style="margin:6em 0" />
-        <article id="job-wiki">
-          <section>
-            <h2>(Informal) Rhetoric &amp; Composition Job Census</h2>
+            </figcaption>
+          </figure>
 
-            <p>
-              <strong>Beyond the initial 17 weeks tracked by rhetmap.org, how many jobs are offered each year in Rhetoric and Composition?</strong> To answer this question, the results below are generated from an informal census count of the jobs advertised each year by using the <a href="https://academicjobs.wikia.org/" rel="nofollow">Academic Jobs Wiki</a> as its source.
-            </p>
-            <p>
-              The below charts were generated from scraped data from the 2011-2020 Rhetorican &amp; Composition Academic Job Wiki pages. I modified Ryan Heuser's <a href="https://github.com/quadrismegistus/jobcensus" target="_blank" rel="noopenner">jobcensus</a> repo designed for English Studies. (See my source code here: <a href="https://github.com/lingeringcode/rc-jobcensus" target="_blank" rel="noopenner">rc-jobcensus</a>).
-            </p>
-            <p>
-              <strong>Note</strong>: Please remember that the latest job year will only reflect the total since it was last scraped. This chart <em>excludes</em> Postdoctoral positions from the recently cross-linked 'Humanities &amp; Social Sceince Postdocs' page in 2020.
-            </p>
-            <p>
-              I am also identifying some data-quirks, so please consider the below results with that information in mind. If you have any questions, please feel free to contact me.
-            </p>
+          <h3>2011-2020: Rhetoric &amp; Composition Jobs by Field</h3>
+          <p>
+            <strong>NOTE</strong>: The field-type chart below <em>includes</em> postdoctoral positions from the recently cross-linked 'Humanities &amp; Social Sceince Postdocs' page in 2020. Consequently, more results that may not be relevant to our discipline may be included below.
+          </p>
+          <figure id="job-wiki-field">
+            <img src="images/rc-field-alias.svg" alt="Chart that conveys the number of academic positions categorized by their field of study between 2011 and the current market year: rhetoric and composition, generalist, community college, etc." />
+            <figcaption>
+              <p>
+                Chart that conveys the number of academic positions categorized by their field of study between 2011 and the current market year: rhetoric and composition, generalist, community college, etc. The job fields were chosen based on their relevance to broader discipline.
+              </p>
+            </figcaption>
+          </figure>
+        </section>
+      </article>
+      <footer id="resources">
+          <h3>Tutorial Resources</h3>
+          <ul>
+            <li>
+              <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">
+                Ridolfo's RhetMap's "Market Comparison" Page</a>
+            </li>
+            <li>
+              <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">
+                Lindgren's Github Repository for this page</a>
+            </li>
+            <li>
+              <a href="http://bl.ocks.org/asielen/44ffca2877d0132572cb" target="_blank" rel="noopener">
+                Example MultiLine Chart</a>
+            </li>
+            <li>
+              <a href="https://charts.animateddata.co.uk/datavistree/" target="_blank" rel="noopener">
+                Example Hierarchical (Tree) Chart</a>
+            </li>
+            <li>
+              <a href="https://www.visualcinnamon.com/2015/08/stretched-chord" target="_blank" rel="noopener">
+                Example Relational (Stretched Chord) Chart</a>
+            </li>
+            <li>
+              <a href="https://github.com/d3/d3/wiki/Gallery" target="_blank" rel="noopener">
+                D3.js Gallery</a>
+            </li>
+            <li>
+              <a href="https://jsonformatter.org/json-pretty-print" target="_blank" rel="noopener">
+                JSON Formatter</a>
+            </li>
+          </ul>
 
-            <h3>2011-2020: Rhetoric &amp; Composition Jobs Overall (excluding postdocs)</h3>
-            <figure id="job-wiki-overall">
-              <img src="images/rc-jobs-overall.svg" alt="Chart that conveys an overall decline in the number of all academic positions between 2011 and the current market year." />
-              <figcaption>
-                <p>
-                  Chart that conveys an overall decline in the number of all academic positions between 2011 and the current market year.
-                </p>
-              </figcaption>
-            </figure>
+          <h3>Visualization Resources</h3>
+          <ul>
+            <li>
+              <a href="https://www.visualcinnamon.com/blog/archive" target="_blank" rel="noopener">
+                Bremer, Nadieh. (2019). Visual Cinnamon [professional blog].</a>
+            </li>
+            <li>
+              <a href="http://www.visualisingdata.com/book/" target="_blank" rel="noopener">
+                Kirk, Andy. (2016). Data visualisation: A handbook for data driven design</a>
+            </li>
+            <li>
+              <a href="http://learnjsdata.com/" target="_blank" rel="noopener">
+                Learn JS Data: Data cleaning, manipulation, and wrangling in JavaScript</a>
+            </li>
+          </ul>
 
-            <h3>2011-2020: Rhetoric &amp; Composition Jobs by Type</h3>
-            <p>
-              <strong>NOTE</strong>: The job-type chart below <em>includes</em> postdoctoral positions from the recently cross-linked 'Humanities &amp; Social Science Postdocs' page in 2020. Consequently, more results that may not be relevant to our discipline may be included below. Furthermore, this provenance of the data explains the spike in postdoctoral positions in 2020.
-            </p>
-            <figure id="job-wiki-job-type">
-              <img src="images/rc-job-type.svg" alt="Chart that conveys the number of academic positions categorized by its type between 2011 and the current market year. For example, tenure-track, non tenure-track, postdoc, and unknown positions." />
-              <figcaption>
-                <p>
-                  Chart that conveys the number of academic positions categorized by its type between 2011 and the current market year: Tenure-track, non tenure-track, postdoc, and unknown positions.
-                </p>
-              </figcaption>
-            </figure>
-            
-            <h3>2011-2020: Rhetoric &amp; Composition Jobs by Field</h3>
-            <p>
-              <strong>NOTE</strong>: The field-type chart below <em>includes</em> postdoctoral positions from the recently cross-linked 'Humanities &amp; Social Sceince Postdocs' page in 2020. Consequently, more results that may not be relevant to our discipline may be included below.
-            </p>
-            <figure id="job-wiki-field">
-              <img src="images/rc-field-alias.svg" alt="Chart that conveys the number of academic positions categorized by their field of study between 2011 and the current market year: rhetoric and composition, generalist, community college, etc." />
-              <figcaption>
-                <p>
-                  Chart that conveys the number of academic positions categorized by their field of study between 2011 and the current market year: rhetoric and composition, generalist, community college, etc. The job fields were chosen based on their relevance to broader discipline.
-                </p>
-              </figcaption>
-            </figure>
-          </section>
-        </article>
-        
-        <footer id="resources">
-            <h3>Tutorial Resources</h3>
-            <ul>
-              <li>
-                <a href="http://rhetmap.org/market-comparison/" target="_blank" rel="noopener">
-                  Ridolfo's RhetMap's "Market Comparison" Page</a>
-              </li>
-              <li>
-                <a href="https://github.com/lingeringcode/rhetmap-time-series" target="_blank" rel="noopener">
-                  Lindgren's Github Repository for this page</a>
-              </li>
-              <li>
-                <a href="http://bl.ocks.org/asielen/44ffca2877d0132572cb" target="_blank" rel="noopener">
-                  Example MultiLine Chart</a>
-              </li>
-              <li>
-                <a href="https://charts.animateddata.co.uk/datavistree/" target="_blank" rel="noopener">
-                  Example Hierarchical (Tree) Chart</a>
-              </li>
-              <li>
-                <a href="https://www.visualcinnamon.com/2015/08/stretched-chord" target="_blank" rel="noopener">
-                  Example Relational (Stretched Chord) Chart</a>
-              </li>
-              <li>
-                <a href="https://github.com/d3/d3/wiki/Gallery" target="_blank" rel="noopener">
-                  D3.js Gallery</a>
-              </li>
-              <li>
-                <a href="https://jsonformatter.org/json-pretty-print" target="_blank" rel="noopener">
-                  JSON Formatter</a>
-              </li>
-            </ul>
-
-            <h3>Visualization Resources</h3>
-            <ul>
-              <li>
-                <a href="https://www.visualcinnamon.com/blog/archive" target="_blank" rel="noopener">
-                  Bremer, Nadieh. (2019). Visual Cinnamon [professional blog].</a>
-              </li>
-              <li>
-                <a href="http://www.visualisingdata.com/book/" target="_blank" rel="noopener">
-                  Kirk, Andy. (2016). Data visualisation: A handbook for data driven design</a>
-              </li>
-              <li>
-                <a href="http://learnjsdata.com/" target="_blank" rel="noopener">
-                  Learn JS Data: Data cleaning, manipulation, and wrangling in JavaScript</a>
-              </li>
-            </ul>
-
-            <h3>Additional Resources</h3>
-            <ul>
-              <li>
-                <a href="writing-with-data.html" target="_blank" rel="noopener">
-                  Another "Missing" Resource: Writing with data</a>
-              </li>
-              <li>
-                <a href="data-changes.html" target="_blank" rel="noopener">
-                  Another "Missing" Resource: From data feed to data viz</a>
-              </li>
-              <li>
-                <a href="https://github.com/lingeringcode/rhetmap-heatmap" target="_blank" rel="noopener">
-                  Lindgren's HeatMap of the Market Comparison data</a>
-              </li>
-              <li>
-                <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics" target="_blank" rel="noopener">
-                  Mozilla Developer Network: JavaScript Basics</a>
-              </li>
-              <li>
-                <a href="https://observablehq.com" target="_blank" rel="noopener">
-                  Observable: D3.js Online Notebooks</a>
-              </li>
-            </ul>
-        </footer>
-        
-      </main>
-    </div>
-  </body>
-  <script type="module" src="./js/getdata.js"></script>
-  <script type="module" src="./js/format.js"></script>
-  <script type="module" src="./js/racing-bars.js"></script>
-  <script type="module" src="./js/avg-posts-per-week.js"></script>
-  <script type="module" src="./js/line.js"></script>
+          <h3>Additional Resources</h3>
+          <ul>
+            <li>
+              <a href="writing-with-data.html" target="_blank" rel="noopener">
+                Another "Missing" Resource: Writing with data</a>
+            </li>
+            <li>
+              <a href="data-changes.html" target="_blank" rel="noopener">
+                Another "Missing" Resource: From data feed to data viz</a>
+            </li>
+            <li>
+              <a href="https://github.com/lingeringcode/rhetmap-heatmap" target="_blank" rel="noopener">
+                Lindgren's HeatMap of the Market Comparison data</a>
+            </li>
+            <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics" target="_blank" rel="noopener">
+                Mozilla Developer Network: JavaScript Basics</a>
+            </li>
+            <li>
+              <a href="https://observablehq.com" target="_blank" rel="noopener">
+                Observable: D3.js Online Notebooks</a>
+            </li>
+          </ul>
+      </footer>
+    </main>
+  </div>
+  <script type="module" src="./js/gSheetsv4.js"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+</body>
 </html>

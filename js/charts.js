@@ -51,10 +51,10 @@ let avgPercentageSheetID = "132y3k_FJj4Gnf8cU0NtDa0eNhf77SlwiNq5GRPL4MRM"
  * Assign URLs Make sure it is public and
  * set the sheet to 'Anyone with link can view'
  */
-let mcURL = "https://spreadsheets.google.com/feeds/list/" 
+let mcURL = "https://spreadsheets.google.com/feeds/worksheets/" 
             + marketComparisonID
-            + "/od6/public/values?alt=json"
-let apURL = "https://spreadsheets.google.com/feeds/list/" 
+            + "/public/basic?alt=json"
+let apURL = "https://spreadsheets.google.com/feeds/worksheets/" 
             + avgPercentageSheetID
             + "/1/public/values?alt=json"
 
@@ -567,7 +567,7 @@ function paintBarViz(data) {
     .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
     .style('text-anchor', 'end')
     .html(d => d.job_year);
-     
+
   svg.selectAll('text.valueLabel')
     .data(weekSlice, d => d.job_year)
     .enter()

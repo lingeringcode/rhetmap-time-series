@@ -4,6 +4,10 @@ overviews.txt
 js/trend-chart.js
 js/charts.js
 js/forecast.js
+js/credentials.js
+test.html
+js/rhetmapdashboard_client.json
+.env
 
 # OS generated files #
 ######################

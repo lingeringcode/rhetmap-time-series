@@ -12,7 +12,8 @@ export const YEARS = [
   {yr: "2017-2018",wks:[]},
   {yr: "2018-2019",wks:[]},
   {yr: "2019-2020",wks:[]},
-  {yr: "2020-2021",wks:[]}
+  {yr: "2020-2021",wks:[]},
+  {yr: "2021-2022",wks:[]}
 ]
 
 let isNaN = (maybeNaN) => maybeNaN!=maybeNaN
