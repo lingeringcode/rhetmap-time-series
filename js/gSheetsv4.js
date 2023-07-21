@@ -1,7 +1,9 @@
+import {API_KEY} from "./credential.js"
+
 const start = () => {
   // Initialize the JavaScript client library
   gapi.client.init({
-    'apiKey': process.env.API_KEY,
+    'apiKey': API_KEY,
     'discoveryDocs': ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
   }).then(() => {
     return gapi.client.sheets.spreadsheets.values.get({
