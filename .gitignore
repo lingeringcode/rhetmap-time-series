@@ -22,3 +22,6 @@ Thumbs.db
 .#*
 .coverage
 .DS_Store
+
+# Local Netlify folder
+.netlify
