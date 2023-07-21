@@ -8,7 +8,7 @@ js/credentials.js
 test.html
 js/rhetmapdashboard_client.json
 .env
-functions/token-hider/node_modules
+# functions/token-hider/node_modules
 
 # OS generated files #
 ######################
