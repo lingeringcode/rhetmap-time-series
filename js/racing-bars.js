@@ -9,7 +9,7 @@ export function paintBarViz(data) {
         .style('stroke-linejoin', 'round')
         .style('opacity', 1);
   }
-  
+
   let svg = d3.select("#bar-chart").append("svg")
     .attr("width", 960)
     .attr("height", 600)
@@ -103,7 +103,7 @@ export function paintBarViz(data) {
     .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
     .style('text-anchor', 'end')
     .html(d => d.job_year);
-     
+
   svg.selectAll('text.valueLabel')
     .data(weekSlice, d => d.job_year)
     .enter()
