@@ -12,8 +12,6 @@ const drawCharts = () => {
   }).then((blob) => {
     return blob.text()
   }).then((csvString) => {
-    console.log(csvString)
-    console.log(Papa.parse(csvString).data)
     let csv = Papa.parse(csvString).data
     return csv
   }).then((response) => {
