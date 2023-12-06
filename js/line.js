@@ -7,9 +7,9 @@ async function drawCharts() {
   let fwyd
 
   // 1. Access data
-  // ID of the Google Spreadsheet
-  let marketComparisonID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w"
-  let avgPercentageSheetID = "132y3k_FJj4Gnf8cU0NtDa0eNhf77SlwiNq5GRPL4MRM"
+  // // ID of the Google Spreadsheet
+  // let marketComparisonID = "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w"
+  // let avgPercentageSheetID = "132y3k_FJj4Gnf8cU0NtDa0eNhf77SlwiNq5GRPL4MRM"
 
   /**
    * Assign URLs Make sure it is public and
@@ -18,14 +18,15 @@ async function drawCharts() {
    * NEW: https://www.googleapis.com/auth/spreadsheets.readonly
    * https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId/values/Sheet1
    */
-  let mcURL = "https://spreadsheets.google.com/feeds/list/" 
-              + marketComparisonID
-              + "/od6/public/values?alt=json"
-  let apURL = "https://spreadsheets.google.com/feeds/list/" 
-              + avgPercentageSheetID
-              + "/1/public/values?alt=json"
+  // let mcURL = "https://spreadsheets.google.com/feeds/list/"
+  //             + marketComparisonID
+  //             + "/od6/public/values?alt=json"
+  // let apURL = "https://spreadsheets.google.com/feeds/list/"
+  //             + avgPercentageSheetID
+  //             + "/1/public/values?alt=json"
+  const mcURL = "./../data/market-comparison-by-week-lindgren - per_week_accum_posts.csv"
 
-  function getValues(spreadsheetId, range, callback) {
+  const getValues = (spreadsheetId, range, callback) => {
     try {
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: spreadsheetId,
@@ -42,7 +43,7 @@ async function drawCharts() {
     }
   }
 
-  function isolateAverage(data) {
+  const isolateAverage = (data) => {
     // Get length of JSON object
     let length = 0
     for(let k in data.feed.entry) if(data.feed.entry.hasOwnProperty(k)) length++

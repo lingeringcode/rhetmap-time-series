@@ -1,16 +1,21 @@
-import {API_KEY} from "./credentials.js"
+// import {API_KEY} from "./credentials.js"
 import {paintBarViz} from "./racing-bars.js"
+import {getSSD,parseHTMLTableElem} from "./utils/utils.js"
+// import * as Papa from "./libs/papaparse/papaparse.js";
 
-const start = () => {
+
+const drawCharts = () => {
   // Initialize the JavaScript client library
-  gapi.client.init({
-    'apiKey': API_KEY,
-    'discoveryDocs': ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-  }).then(() => {
-    return gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: "1GuECV6Ot60h-Qab3e9-KPaKLdgXB3reoyZgo3VTlO_w",
-      range: 'Sheet1!A1:M18',
-    })
+  // getSSD()
+  fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vT-SC1t5Qj4FnVTDw7sj2uJFds1IFEEObSMpcGHbFIqoaw2KOJOcOE4cFPgxokU5DGZByoaHwBUt94L/pub?gid=0&single=true&output=csv').then((response) => {
+    return response.blob()
+  }).then((blob) => {
+    return blob.text()
+  }).then((csvString) => {
+    console.log(csvString)
+    console.log(Papa.parse(csvString).data)
+    let csv = Papa.parse(csvString).data
+    return csv
   }).then((response) => {
     const writePriorPostings = (raw) => {
       let newList = []
@@ -27,17 +32,17 @@ const start = () => {
           raw.forEach(function(row){
             if ( (row["job_year"] == r["job_year"]) && (row["week"] == (r["week"]-1))) {
               if (row["posting_total"] != 0) {
-                r["last_posting_total"] = row["posting_total"];
+                r["last_posting_total"] = row["posting_total"]
               }
               // if no postings, then append previous weeks total
               else if (row["posting_total"] == 0) {
-                r["last_posting_total"] = row["last_posting_total"];
+                r["last_posting_total"] = row["last_posting_total"]
               }
             }
-          });
+          })
         }
-      });
-      return raw;
+      })
+      return raw
     }
     const writeRanks = (lwd) => {
       let w1 = [],w2 = [],w3 = [],w4 = [],w5 = [],w6 = [],w7 = [],w8 = [],w9 = [],w10 = [],w11 = [],w12 = [],w13 = [],w14 = [],w15 = [],w16 = [],w17 = [];
@@ -519,15 +524,14 @@ const start = () => {
       return fullWeeklyData;
     }
 
-    // START PROCESS
-    const loadedData = parsePromisedData(response)
-    let fwyd = formatBarData(loadedData)
+    // START PROCESSING
+    // const loadedData = parsePromisedData(response)
+    let fwyd = formatBarData(response)
     paintBarViz(fwyd)
 
-  }).catch((err) => {
-  	console.log(err.error.message)
+  })
+  .catch((err) => {
+  	console.log(err)
   })
 }
-
-// Load the JavaScript client library
-gapi.load('client', start);
+drawCharts()
