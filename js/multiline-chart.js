@@ -1,51 +1,47 @@
-export function paintMultiLineViz(data) {
-
+// MULTILINE CHART //
+export const paintMultiLineViz = (data) => {
   // Define the dimensions of the SVG
-  let svg = d3.select("#line-chart"),
-    margin = {top: 0, right: 150, bottom: 50, left: 0},
-    width = svg.attr("width") - margin.left - margin.right,
-    height = svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+  let svg = d3.select("#line-chart")
+  let margin = {top: 0, right: 150, bottom: 50, left: 0}
+  let width = svg.attr("width") - margin.left - margin.right
+  let height = svg.attr("height") - margin.top - margin.bottom
+  let g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
   // Define the x & y ranges and color scale
-  let x = d3.scaleLinear().range([0, width]),
-      y = d3.scaleLinear().range([height, 0]),
-      z = d3.scaleOrdinal(d3.schemeBrBG[data.length])
+  let x = d3.scaleLinear().range([0, width])
+  let y = d3.scaleLinear().range([height, 0])
+  let z = d3.scaleOrdinal(d3.schemeAccent)
 
   /*
+    * Below are 3 functions that help the subsequently
+    * written d3.line() method. FYI, JS requires that
+    * such functions be written before their use in the
+    * code.
 
-  * Below are 3 functions that help the subsequently
-  * written d3.line() method. FYI, JS requires that
-  * such functions be written before their use in the
-  * code.
-
-  * firstNaN: Find and return first instance
-  * of NaN (empty spreadsheet cell value) in
-  * an array, which will be from the new
-  * market year.
-
+    * firstNaN: Find and return first instance
+    * of NaN (empty spreadsheet cell value) in
+    * an array, which will be from the new
+    * market year.
   */
   function firstNaN(wkValue) {
-    return Number.isNaN(wkValue)
+    return Number.isNaN(wkValue);
   }
-
   /*
-  * findMaxLastWeek: Find and return last posting,
-  * which helps year, which has cell values with
-  * no value yet.
+    * findMaxLastWeek: Find and return last posting,
+    * which helps year, which has cell values with
+    * no value yet.
   */
   function findMaxLastWeek(d) {
     for (let mp = 0; mp <= data.length - 1; mp++) {
       for (let mw = 0; mw <= data[mp].wks.length - 1; mw++) {
         // Find first NaN instance and return it if TRUE
         if ( Number.isNaN(data[mp].wks[mw]) ) {
-          let week = data[mp].wks.findIndex(firstNaN)
-          return week
+          let week = data[mp].wks.findIndex(firstNaN);
+          return week;
         }
       }
     }
   }
-
   // Returns last available posting count
   function findMaxPost(d) {
     // Returns last week for its index
@@ -62,19 +58,18 @@ export function paintMultiLineViz(data) {
     for (let mp = 0; mp <= data.length - 1; mp++) {
       for (let mw = 0; mw <= data[mp].wks.length - 1; mw++) {
         if ( Number.isNaN(data[mp].wks[mw]) ) {
-          let lastMaxPost = findLastPost(data[mp].yr)
-          let weekIndex = lastMaxPost - 1
-          let lmp = data[mp].wks[weekIndex]
-          return lmp
+          let lastMaxPost = findLastPost(data[mp].yr);
+          let weekIndex = lastMaxPost - 1;
+          let lmp = data[mp].wks[weekIndex];
+          return lmp;
         }
       }
     }
   }
-
   // Retrieve year to add as ID to legend elements
   function addLegendID(d) {
-    let yearID = d.substr(0, 4)
-    return "legend-"+yearID
+    let yearID = d.substr(0, 4);
+    return "legend-"+yearID;
   }
   /*
     * Define x & y values for each line and its area
@@ -88,24 +83,25 @@ export function paintMultiLineViz(data) {
       })
       .y0(height)
       .y1(function(d) {
-        return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings)
+        return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings);
       });
 
   // Define the lines
   let line = d3.line()
       .curve(d3.curveBasis)
       .x(function(d) {
-        return x( Number.isNaN(d.postings) ? findMaxLastWeek(d) : d.week)
+        return x( Number.isNaN(d.postings) ? findMaxLastWeek(d) : d.week);
       })
       .y(function(d) {
-        return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings)
-      })
+        return y(Number.isNaN(d.postings) ? findMaxPost(d) : d.postings);
+      });
 
   /*
     Format data for drawing. This is where
     the processed data really shines to create
     the multiple lines for each year. :-)
   */
+
   let marketYears = data.map(function(d) {
     let wkD = d.wks;
     let week = 0;
@@ -201,9 +197,7 @@ export function paintMultiLineViz(data) {
       .attr("d", function(marketYears) {
         return line(marketYears.values);
       })
-      .style("stroke", function(marketYears) { 
-        return z(marketYears.id)
-      })
+      .style("stroke", function(marketYears) { return z(marketYears.id); });
 
   // Append the area
   markYear.append("path")
@@ -211,9 +205,7 @@ export function paintMultiLineViz(data) {
       .attr("d", function(marketYears) {
         return area(marketYears.values);
       })
-      .style("fill", function(marketYears) { 
-        return z(marketYears.id) 
-      })
+      .style("fill", function(marketYears) { return z(marketYears.id); });
 
   // Create labels
   markYear.append("text")
@@ -231,13 +223,13 @@ export function paintMultiLineViz(data) {
       })
       .attr("x", 50)
       .attr("dy", "0.5em")
-      .style("font", "14px sans-serif")
+      .style("font", "14px sans-serif");
 
   /**
-  *
-  *   Mouseover line and circle effect
-  *   Modified from src: http://stackoverflow.com/questions/34886070/multiseries-line-chart-with-mouseover-tooltip/34887578#34887578
-  *
+    *
+    *   Mouseover line and circle effect
+    *   Modified from src: http://stackoverflow.com/questions/34886070/multiseries-line-chart-with-mouseover-tooltip/34887578#34887578
+    *
   **/
   let mouseG = svg.append("g")
     .attr("class", "mouse-over-effects");
@@ -290,8 +282,7 @@ export function paintMultiLineViz(data) {
         .style("opacity", "1");
     })
     .on('mousemove', function() { // mouse moving over canvas
-      let mouse = d3.mouse(this)
-      let pos
+      let mouse = d3.mouse(this);
       d3.select(".mouse-line")
         .attr("d", function() {
           let d = "M" + mouse[0] + "," + height;
@@ -301,26 +292,24 @@ export function paintMultiLineViz(data) {
 
       d3.selectAll(".mouse-per-line")
         .attr("transform", function(d, i) {
-
           let xDate = x.invert(mouse[0]),
               bisect = d3.bisector(function(d) {
-                return d.postings
-              }).right
-              let idx = bisect(d.values, xDate)
-
+                return d.postings;
+              }).right;
+          let idx = bisect(d.values, xDate);
           let beginning = 0,
               end = lines[i].getTotalLength(),
-              target = null
+              target = null;
 
           while (true){
-            target = Math.floor((beginning + end) / 2)
-            pos = lines[i].getPointAtLength(target)
+            let target = Math.floor((beginning + end) / 2);
+            let pos = lines[i].getPointAtLength(target);
             if ((target === end || target === beginning) && pos.x !== mouse[0]) {
-              break
+              break;
             }
-            if (pos.x > mouse[0])      end = target
-            else if (pos.x < mouse[0]) beginning = target
-            else break //position found
+            if (pos.x > mouse[0])      end = target;
+            else if (pos.x < mouse[0]) beginning = target;
+            else break; //position found
           }
 
           // Add mouseover label
@@ -352,7 +341,8 @@ export function paintMultiLineViz(data) {
               return "translate(5,0)";
             });
 
-          return "translate(" + mouse[0] + "," + pos.y +")"
+          // FIX THIS 'pos' var error
+          // return "translate(" + mouse[0] + "," + pos.y +")";
         });
     });
 }
