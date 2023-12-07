@@ -1,11 +1,10 @@
 import {paintBarViz} from "./racing-bars.js"
 import {paintMultiLineViz} from "./multiline-chart.js"
-import {getSSD,parseHTMLTableElem,writePriorPostings,writeRanks,formatBarData} from "./utils/utils.js"
+import {parseHTMLTableElem,writePriorPostings,writeRanks,formatBarData} from "./utils/utils.js"
 
 
 const drawCharts = () => {
-  // Initialize the JavaScript client library
-  // getSSD()
+  // Fetch the data
   fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vT-SC1t5Qj4FnVTDw7sj2uJFds1IFEEObSMpcGHbFIqoaw2KOJOcOE4cFPgxokU5DGZByoaHwBUt94L/pub?gid=0&single=true&output=csv').then((response) => {
     return response.blob()
   }).then((blob) => {
