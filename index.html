@@ -17,7 +17,7 @@
 </head>
 <body>
   <div class="container">
-    <header>
+    <header role="banner">
       <h1>Rhetoric, Composition, and Technical Communication Job Postings per Year</h1>
       <div>
         <p>
@@ -45,18 +45,18 @@
         </div>
       </div>
     </header>
-    <main>
+    <main role="main" aria-label="Charts about the job market">
       <article id="chart-container">
         <h2>Rhetmap.org: Tracking Weeks 1-17</h2>
-        <section id="racing-bar-chart">
-          <h3>"Racing" bar chart: Comparing each year's job postings per week until week 17/January 1</h3>
+        <section id="racing-bar-chart" role="region" aria-labelledby="racing-bar-chart-heading">
+          <h3 id="racing-bar-chart-heading">"Racing" bar chart: Comparing each year's job postings per week until week 17/January 1</h3>
           <p>
             Current year only includes values up until the available weekly <a href="http://rhetmap.org/market-comparison/">rhetmap data</a>.
           </p>
           <div id="bar-chart"></div>
         </section>
-        <section id="annotated-multiline-chart">
-          <h3>Annotated multi-line chart: Comparing each year's job postings per week until week 17/January 1</h3>
+        <section id="annotated-multiline-chart" role="region" aria-labelledby="annotated-multiline-chart-heading">
+          <h3 id="annotated-multiline-chart-heading">Annotated multi-line chart: Comparing each year's job postings per week until week 17/January 1</h3>
           <p>
             To compare the yearly data per week, either hover your mouse over the chart below, or click and drag your mouse within the chart's area.
           </p>

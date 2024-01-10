@@ -1,5 +1,6 @@
 import {paintBarViz} from "./racing-bars.js"
 import {paintMultiLineViz} from "./multiline-chart.js"
+import {paintPredictChart} from "./predict-chart.js"
 import {parseHTMLTableElem,writePriorPostings,writeRanks,formatBarData} from "./utils/utils.js"
 
 
@@ -18,8 +19,9 @@ const drawCharts = () => {
     return listPerYearAndWeeklyData
   }).then((listOfData) => {
     // Start drawing charts
-    paintMultiLineViz(listOfData[0])
     paintBarViz(listOfData[1])
+    paintMultiLineViz(listOfData[0])
+    // paintPredictChart(listOfData[0])
   }).catch((err) => {
   	console.log(err)
   })
