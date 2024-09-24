@@ -262,11 +262,15 @@ path.domain{
 	border-top: 2px;
 	border-bottom: 2px;
 	font-weight: 600;
+	text-align: center;
 
-	&.striped tbody tr:nth-child(odd) td,.striped tbody tr:nth-child(odd) th{background-color:rgba(148,103,189,0.5);}
+	& thead, tbody > tr:hover {
+		background-color:rgba(148,103,189,0.35);
+	}
 
 	& th {
 		font-size: 1.1rem;
+		padding: 0.5rem;
 	}
 	& td {
 		font-size: 1rem;
@@ -297,9 +301,6 @@ path.domain{
 
 }
 
-.table tr > td {text-align: center;}
-.table tr > th:nth-child(odd) {text-align: left;}
-.table tr > th {font-size: 1.1em;padding-bottom: 3px; color: #333;}
 .table tr > th small {font-size: 0.8em;}
 ul.tables{margin-left: 3px;list-style-type: none;}
 ul.tables > li {margin-bottom: 20px;}

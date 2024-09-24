@@ -23,8 +23,8 @@ export function tabulatedSeasonalAvgs(data) {
 
       // Append cells to new row
       newRow.appendChild(yearCell)
-      newRow.appendChild(postCell)
       newRow.appendChild(percentageCell)
+      newRow.appendChild(postCell)
 
       // Append to table
       tableHead.appendChild(newRow)
@@ -47,8 +47,8 @@ export function tabulatedSeasonalAvgs(data) {
 
       // Append cells to new row
       newRow.appendChild(yearCell)
-      newRow.appendChild(postCell)
       newRow.appendChild(percentageCell)
+      newRow.appendChild(postCell)
 
       // Append to table
       tableBody.appendChild(newRow)
