@@ -256,26 +256,51 @@ path.domain{
   TABLE
 
 ----------------------------------------------------------------------------- */
-table {
-  background: #FFF;
+.table {
+  background: #ffffff;
+	max-width: 700px;
+	border-top: 2px;
+	border-bottom: 2px;
+	font-weight: 600;
+
+	&.striped tbody tr:nth-child(odd) td,.striped tbody tr:nth-child(odd) th{background-color:rgba(148,103,189,0.5);}
+
+	& th {
+		font-size: 1.1rem;
+	}
+	& td {
+		font-size: 1rem;
+	}
+
+	& td[class*="span"], th[class*="span"] {
+		display:table-cell;
+		text-align:center;
+		margin-left:0;
+	}
+
+	& .fifteen {float: none;width: 15%;padding: 3px;}
+	& .twenty{float:none;width:20%;padding:3px;}
+	& .thirty{float:none;width:30%;padding:3px;}
+	& .forty{float:none;width:40%;padding:3px;}
+	& .fifty{float:none;width:50%;padding:3px;}
+	& .sixty{float:none;width:60%;padding:3px;}
+	& .seventy{float:none;width:70%;padding:3px;}
+	& .hundred{float:none;width:100%;padding:3px;}
+
+	& .difficulties {
+		float:none;
+		width:10%;
+		padding:3px;
+		text-align:center;
+		font-size:1.1em;
+	}
+
 }
-table td[class*="span"],table th[class*="span"],.row-fluid table td[class*="span"],.row-fluid table th[class*="span"]{display:table-cell;text-align:center;margin-left:0;}
-.table {width:60%;border-top: 2px;border-bottom: 2px;}
-.table td.fifteen,.table th.fifteen{float:none;width:15%;padding:3px;}
-.table td.difficulties,.table th.difficulties{float:none;width:10%;padding:3px;text-align:center;font-size:1.1em;}
-.table td.twenty,.table th.twenty{float:none;width:20%;padding:3px;}
-.table td.thirty,.table th.thirty{float:none;width:30%;padding:3px;}
-.table td.forty,.table th.forty{float:none;width:40%;padding:3px;}
-.table td.fifty,.table th.fifty{float:none;width:50%;padding:3px}
-.table td.sixty,.table th.sixty{float:none;width:60%;padding:3px}
-.table td.seventy,.table th.seventy{float:none;width:70%;padding:3px}
-.table tr.hundred,td.hundred,.table th.hundred{float:none;width:100%;padding:3px}
-.table tr > td:nth-child(even) {text-align: center;}
+
+.table tr > td {text-align: center;}
 .table tr > th:nth-child(odd) {text-align: left;}
 .table tr > th {font-size: 1.1em;padding-bottom: 3px; color: #333;}
 .table tr > th small {font-size: 0.8em;}
-.table td { font-weight: 500; }
-.striped tbody tr:nth-child(odd) td,.striped tbody tr:nth-child(odd) th{background-color:rgba(148,103,189,0.64);}
 ul.tables{margin-left: 3px;list-style-type: none;}
 ul.tables > li {margin-bottom: 20px;}
 
