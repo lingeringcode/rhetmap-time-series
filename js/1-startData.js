@@ -21,7 +21,7 @@ const drawCharts = () => {
   }).then((listOfData) => {
     // Start drawing charts
     paintBarViz(listOfData[1])
-    paintMultiLineViz(listOfData[0])
+    // paintMultiLineViz(listOfData[0])
     // paintPredictChart(listOfData[0])
   }).catch((err) => {
   	console.log(err)
@@ -38,7 +38,6 @@ const drawCharts = () => {
   }).then((csvStructuredData) => {
     // START PROCESSING
     tabulatedSeasonalAvgs(csvStructuredData)
-    console.log(csvStructuredData)
     // let listPerYearAndWeeklyData = formatBarData(csvStructuredData)
     // return listPerYearAndWeeklyData
   }).catch((err) => {

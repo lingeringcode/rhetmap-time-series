@@ -15,8 +15,8 @@ export function paintBarViz(data) {
     .attr("height", 600)
 
   let tickDuration = 2500
-
-  let top_n = 12
+  // Update top_n each year
+  let top_n = 13
   let height = 600
   let width = 960
 
